@@ -15,13 +15,13 @@
 
 /* CustomGS Setup Variables */
 
-$base-resolution: 1250px; // Quero que nesta resolução a largura máxima atinja 100%
-$container-max-width: 1200px; // Largura máxima do container
-$number-of-columns: 24; // Quantidade de colunas no grid
-$gutter: 16px; // Gutter
-$fixed-gutter: true;
-$ie7-support: true;
-$semantic: true;
+$base-resolution: 1250px; // Container max-width will get 100% from this resolution
+$container-max-width: 1200px; // Container max width
+$number-of-columns: 24; // Grid columns amount
+$gutter: 16px; // Gutter (space between columns)
+$fixed-gutter: true; // Gutter will not change within fluid columns
+$ie7-support: true; // Support to IE7
+$semantic: true; // Do not generate classes
 
 /* Helper Variables - Do not touch this! */
 
