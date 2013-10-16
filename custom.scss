@@ -1,0 +1,251 @@
+@charset "UTF-8";
+
+@import "compass";
+
+/* Variáveis de configuração */
+
+$resolucao-base: 1250px; // Quero que nesta resolução a largura máxima atinja 100%
+$container: 1200px; // Largura máxima do container
+$qtd-colunas: 24; // Quantidade de colunas no grid
+$gutter: 16px; // Gutter
+$gutter-fixo: true;
+$suporte-ie7: true;
+$semantico: true;
+
+/*!
+    Saramutango Grid System - http://onrails.com.br/
+
+    Baseado nas melhores características de:
+     * 960 Grid System - http://960.gs/
+     * Unsemantic - http://unsemantic.com/
+     * Twitter Bootstrap - http://getbootstrap.com/
+     * Semantic - http://semantic.gs/
+    Licensed under GPL and MIT.
+*/
+
+/* Variáveis estáticas */
+
+$largura-coluna: ($container / $qtd-colunas) - $gutter; // Largura da coluna
+$largura-coluna-mais-gutter: $gutter + $largura-coluna;
+
+
+/* Funções */
+
+@function responsive($target, $context) {
+  @return ($target / $context) * 100%;
+}
+
+@function unresponsive($target, $context) {
+  @return "#{$target}/#{$context}";
+}
+
+/* Containers
+----------------------------------------------------------------------------------------------------*/
+
+%container, %container_#{$qtd-colunas} {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: $container;
+  width: responsive($container, $resolucao-base); /* #{unresponsive($largura-maxima, $resolucao-base)} */
+}
+
+@if $semantico == false {
+  .container_#{$qtd-colunas} {
+    @extend %container;
+  }
+}
+
+/* Grids
+----------------------------------------------------------------------------------------------------*/
+
+%grids {
+  display: inline;
+  float: left;
+  position: relative;
+  @if $gutter-fixo {
+    @include box-sizing(border-box);
+    padding-left: $gutter / 2;
+    padding-right: $gutter / 2;
+    @if $suporte-ie7 {
+      *padding-left: 0;
+      *padding-right: 0;
+      & > * {
+        *margin-left: expression((!this.className.match(/grid-[1-9]+/) && this.currentStyle.display === "block" && this.currentStyle.width === "auto") && "#{$gutter / 2}");
+        *margin-right: expression((!this.className.match(/grid-[1-9]+/) && this.currentStyle.display === "block" && this.currentStyle.width === "auto") && "#{$gutter / 2}");
+      }
+    }
+  } @else {
+    margin-left: responsive($gutter / 2, $container); /* #{unresponsive($grid-gutter / 2, $largura-maxima)} */
+    margin-right: responsive($gutter / 2, $container); /* #{unresponsive($grid-gutter / 2, $largura-maxima)} */
+  }
+}
+
+@for $i from 1 through $qtd-colunas {
+  %grid_#{$i} {
+    @extend %grids;
+  }
+  @if $semantico == false {
+    .grid_#{$i} {
+      @extend %grids;
+    }
+  }
+}
+
+%pushes_pulls {
+  position: relative;
+}
+
+@for $i from 1 through $qtd-colunas {
+  %push_#{$i}, %pull_#{$i} {
+    @extend %pushes_pulls;
+  }
+  @if $semantico == false {
+    .push_#{$i}, .pull_#{$i} {
+      @extend %pushes_pulls;
+    }
+  }
+}
+
+/* Grid >> Children (Alpha ~ First, Omega ~ Last)
+----------------------------------------------------------------------------------------------------*/
+
+%alpha {
+  margin-left: 0;
+}
+
+%omega {
+  margin-right: 0;
+}
+
+@if $semantico == false {
+  .alpha {
+    @extend %alpha;
+  }
+
+  .omega {
+    @extend %omega;
+  }
+}
+
+/* Grid >> #{$grid-qtd-colunas} colunas
+----------------------------------------------------------------------------------------------------*/
+
+@for $i from 1 through $qtd-colunas {
+
+  %grid_#{$i} {
+    @if $gutter-fixo {
+      width: responsive($largura-coluna+$gutter+($largura-coluna-mais-gutter*($i - 1)), $container); /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+    } @else {
+      width: responsive($largura-coluna+($largura-coluna-mais-gutter*($i - 1)), $container); /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+    }
+  }
+
+  @if $semantico == false {
+    .container_#{$qtd-colunas} .grid_#{$i} {
+      @extend %grid_#{$i};
+    }
+  }
+
+}
+
+/* Prefix Extra Space >> #{$grid-qtd-colunas} Columns
+----------------------------------------------------------------------------------------------------*/
+
+@for $i from 1 through 24 {
+  %prefix_#{$i} {
+    @if $gutter-fixo {
+      margin-left: responsive($largura-coluna+($largura-coluna-mais-gutter*($i - 1))+$gutter, $container); /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+    } @else {
+      padding-left: responsive($largura-coluna+($largura-coluna-mais-gutter*($i - 1))+$gutter, $container); /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+    }
+  }
+  @if $semantico == false {
+    .container_#{$qtd-colunas} .prefix_#{$i} {
+      @extend %prefix_#{$i};
+    }
+  }
+}
+
+/* Suffix Extra Space >> #{$grid-qtd-colunas} Columns
+----------------------------------------------------------------------------------------------------*/
+
+@for $i from 1 through $qtd-colunas {
+  %suffix_#{$i} {
+    @if $gutter-fixo {
+      margin-right: responsive($largura-coluna+($largura-coluna-mais-gutter*($i - 1))+$gutter, $container); /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+    } @else {
+      padding-right: responsive($largura-coluna+($largura-coluna-mais-gutter*($i - 1))+$gutter, $container); /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+    }
+  }
+  @if $semantico == false {
+    .container_#{$qtd-colunas} .suffix_#{$i} {
+      @extend %suffix_#{$i};
+    }
+  }
+}
+
+/* Push Space >> #{$grid-qtd-colunas} Columns
+----------------------------------------------------------------------------------------------------*/
+
+@for $i from 1 to $qtd-colunas {
+  %push_#{$i} {
+    left: responsive($largura-coluna-mais-gutter*$i, $container); /* #{unresponsive($grid-largura-col-gutter*$i, $largura-maxima)} */
+  }
+  @if $semantico == false {
+    .container_#{$qtd-colunas} .push_#{$i} {
+      @extend %push_#{$i};
+    }
+  }
+}
+
+/* Pull Space >> #{$grid-qtd-colunas} Columns
+----------------------------------------------------------------------------------------------------*/
+
+@for $i from 1 to $qtd-colunas {
+  %pull_#{$i} {
+    padding-left: responsive(-($largura-coluna-mais-gutter*$i), $container); /* #{unresponsive(-($grid-largura-col-gutter*$i), $largura-maxima)} */
+  }
+  @if $semantico == false {
+    .container_#{$qtd-colunas} .pull_#{$i} {
+      @extend %pull_#{$i};
+    }
+  }
+}
+
+/* `Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+
+/* http://sonspring.com/journal/clearing-floats */
+
+%clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+/* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
+
+%clearfix {
+  &:before,
+  &:after {
+    content: '\0020';
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+  }
+}
+
+%clearfix:after {
+  clear: both;
+}
+
+@if $suporte-ie7 {
+  %clearfix {
+    zoom: 1;
+  }
+}
