@@ -1,0 +1,207 @@
+@charset "UTF-8"
+
+@import "compass"
+
+/*!
+    Custom Grid System 1.0.0 - http://custom.gs/
+
+    Baseado nas melhores características de:
+     * 960 Grid System - http://960.gs/
+     * Unsemantic - http://unsemantic.com/
+     * Twitter Bootstrap - http://getbootstrap.com/
+     * Semantic - http://semantic.gs/
+    Licensed under GPL and MIT.
+*/
+
+/* CustomGS Setup Variables */
+
+$base-resolution: 1250px // Container max-width will get 100% from this resolution
+$container-max-width: 1200px // Container max width
+$number-of-columns: 24 // Grid columns amount
+$gutter: 16px // Gutter (space between columns)
+$fixed-gutter: true // Gutter will not change within fluid columns
+$ie7-support: true // Support to IE7
+$semantic: true // Do not generate classes
+
+/* Helper Variables - Do not touch this! */
+
+$total-column-width: ($container-max-width / $number-of-columns) // Largura da coluna
+$column-width: $total-column-width - $gutter
+
+
+/* Functions - Do not touch this! */
+
+@function responsive($target, $context)
+  @return ($target / $context) * 100%
+
+@function unresponsive($target, $context)
+  @return "#{$target}/#{$context}"
+
+/* Containers
+----------------------------------------------------------------------------------------------------*/
+
+%container, %container_#{$number-of-columns}
+  margin-left: auto
+  margin-right: auto
+  max-width: $container-max-width
+  width: responsive($container-max-width, $base-resolution) /* #{unresponsive($largura-maxima, $resolucao-base)} */
+
+@if $semantic == false
+  .container_#{$number-of-columns}
+    @extend %container
+
+/* Grids
+----------------------------------------------------------------------------------------------------*/
+
+%grids
+  display: inline
+  float: left
+  position: relative
+  @if $fixed-gutter
+    @include box-sizing(border-box)
+    padding-left: $gutter / 2
+    padding-right: $gutter / 2
+    @if $ie7-support
+      *padding-left: 0
+      *padding-right: 0
+      & > *
+        *margin-left: expression((!this.className.match(/grid-[1-9]+/) && this.currentStyle.display === "block" && this.currentStyle.width === "auto") && "#{$gutter / 2}")
+        *margin-right: expression((!this.className.match(/grid-[1-9]+/) && this.currentStyle.display === "block" && this.currentStyle.width === "auto") && "#{$gutter / 2}")
+  @else
+    margin-left: responsive($gutter / 2, $container-max-width) /* #{unresponsive($grid-gutter / 2, $largura-maxima)} */
+    margin-right: responsive($gutter / 2, $container-max-width) /* #{unresponsive($grid-gutter / 2, $largura-maxima)} */
+
+
+@for $i from 1 through $number-of-columns
+  %grid_#{$i}
+    @extend %grids
+  @if $semantic == false
+    .grid_#{$i}
+      @extend %grids
+
+%pushes_pulls
+  position: relative
+
+@for $i from 1 through $number-of-columns
+  %push_#{$i}, %pull_#{$i}
+    @extend %pushes_pulls
+  @if $semantic == false
+    .push_#{$i}, .pull_#{$i}
+      @extend %pushes_pulls
+
+/* Grid >> Children (Alpha ~ First, Omega ~ Last)
+----------------------------------------------------------------------------------------------------*/
+
+%alpha
+  margin-left: 0
+
+%omega
+  margin-right: 0
+
+@if $semantic == false
+  .alpha
+    @extend %alpha
+
+  .omega
+    @extend %omega
+
+/* Grid >> #{$grid-qtd-colunas} colunas
+----------------------------------------------------------------------------------------------------*/
+
+@for $i from 1 through $number-of-columns
+
+  %grid_#{$i}
+    @if $fixed-gutter
+      width: responsive($total-column-width+$gutter+($column-width*($i - 1)), $container-max-width) /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+    @else
+      width: responsive($total-column-width+($column-width*($i - 1)), $container-max-width) /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+
+  @if $semantic == false
+    .container_#{$number-of-columns} .grid_#{$i}
+      @extend %grid_#{$i}
+
+/* Prefix Extra Space >> #{$grid-qtd-colunas} Columns
+----------------------------------------------------------------------------------------------------*/
+
+@for $i from 1 through 24
+  %prefix_#{$i}
+    @if $fixed-gutter
+      margin-left: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width) /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+    @else
+      padding-left: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width) /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+
+  @if $semantic == false
+    .container_#{$number-of-columns} .prefix_#{$i}
+      @extend %prefix_#{$i}
+
+/* Suffix Extra Space >> #{$grid-qtd-colunas} Columns
+----------------------------------------------------------------------------------------------------*/
+
+@for $i from 1 through $number-of-columns
+  %suffix_#{$i}
+    @if $fixed-gutter
+      margin-right: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width) /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+    @else
+      padding-right: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width) /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+
+  @if $semantic == false
+    .container_#{$number-of-columns} .suffix_#{$i}
+      @extend %suffix_#{$i}
+
+/* Push Space >> #{$grid-qtd-colunas} Columns
+----------------------------------------------------------------------------------------------------*/
+
+@for $i from 1 to $number-of-columns
+  %push_#{$i}
+    left: responsive($column-width*$i, $container-max-width) /* #{unresponsive($grid-largura-col-gutter*$i, $largura-maxima)} */
+  @if $semantic == false
+    .container_#{$number-of-columns} .push_#{$i}
+      @extend %push_#{$i}
+
+/* Pull Space >> #{$grid-qtd-colunas} Columns
+----------------------------------------------------------------------------------------------------*/
+
+@for $i from 1 to $number-of-columns
+  %pull_#{$i}
+    padding-left: responsive(-($column-width*$i), $container-max-width) /* #{unresponsive(-($grid-largura-col-gutter*$i), $largura-maxima)} */
+  @if $semantic == false
+    .container_#{$number-of-columns} .pull_#{$i}
+      @extend %pull_#{$i}
+
+
+/* `Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+
+/* http://sonspring.com/journal/clearing-floats */
+
+%clear
+  clear: both
+  display: block
+  overflow: hidden
+  visibility: hidden
+  width: 0
+  height: 0
+
+/* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
+
+%clearfix
+  &:before,
+  &:after
+    content: '\0020'
+    display: block
+    overflow: hidden
+    visibility: hidden
+    width: 0
+    height: 0
+    clear: both
+
+@if $ie7-support
+  %clearfix
+    zoom: 1
+
+@if $semantic == false
+  .clear
+    @extend %clear
+
+  .clearfix
+    @extend %clearfix
