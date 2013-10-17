@@ -1,11 +1,10 @@
 @charset "UTF-8";
-
 @import "compass";
 
 /*!
     Custom Grid System 1.0.0 - http://custom.gs/
 
-    Baseado nas melhores características de:
+    Custom Grid System is a new Sass based grid system that combines best practices of:
      * 960 Grid System - http://960.gs/
      * Unsemantic - http://unsemantic.com/
      * Twitter Bootstrap - http://getbootstrap.com/
@@ -28,7 +27,6 @@ $semantic: true; // Do not generate classes
 $column-width: ($container-max-width / $number-of-columns) - $gutter;
 $total-column-width: $gutter + $column-width;
 
-
 /* Functions - Do not touch this! */
 
 @function responsive($target, $context) {
@@ -46,7 +44,7 @@ $total-column-width: $gutter + $column-width;
   margin-left: auto;
   margin-right: auto;
   max-width: $container-max-width;
-  width: responsive($container-max-width, $base-resolution); /* #{unresponsive($container-max-width, $base-resolution)} */
+  width: responsive($container-max-width, $base-resolution); /* unresponsive($container-max-width, $base-resolution) */
 }
 
 @if $semantic == false {
@@ -61,6 +59,7 @@ $total-column-width: $gutter + $column-width;
 %grids {
   display: inline;
   float: left;
+  position: relative;
   @if $fixed-gutter {
     @include box-sizing(border-box);
     padding-left: $gutter / 2;
@@ -74,8 +73,8 @@ $total-column-width: $gutter + $column-width;
       }
     }
   } @else {
-    margin-left: responsive($gutter / 2, $container-max-width); /* #{unresponsive($gutter / 2, $container-max-width)} */
-    margin-right: responsive($gutter / 2, $container-max-width); /* #{unresponsive($gutter / 2, $container-max-width)} */
+    margin-left: responsive($gutter / 2, $container-max-width); /* unresponsive($gutter / 2, $container-max-width) */
+    margin-right: responsive($gutter / 2, $container-max-width); /* unresponsive($gutter / 2, $container-max-width) */
   }
 }
 
@@ -95,7 +94,7 @@ $total-column-width: $gutter + $column-width;
 }
 
 @for $i from 1 through $number-of-columns {
-  %push_#{$i}, %pull_#{$i} { 
+  %push_#{$i}, %pull_#{$i} {
     @extend %pushes_pulls;
   }
   @if $semantic == false {
@@ -126,16 +125,16 @@ $total-column-width: $gutter + $column-width;
   }
 }
 
-/* Grid >> #{$number-of-columns} colunas
+/* Grid >> #{$number-of-columns} columns
 ----------------------------------------------------------------------------------------------------*/
 
 @for $i from 1 through $number-of-columns {
 
   %grid_#{$i} {
     @if $fixed-gutter {
-      width: responsive($total-column-width+$gutter+($column-width*($i - 1)), $container-max-width); /* #{unresponsive($total-column-width+$gutter+($column-width*($i - 1)), $container-max-width)} */
+      width: responsive($column-width+$gutter+($total-column-width*($i - 1)), $container-max-width); /* unresponsive($column-width+$gutter+($total-column-width*($i - 1)), $container-max-width) */
     } @else {
-      width: responsive($total-column-width+($column-width*($i - 1)), $container-max-width); /* #{unresponsive($total-column-width+($column-width*($i - 1)), $container-max-width)} */
+      width: responsive($column-width+($total-column-width*($i - 1)), $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1)), $container-max-width) */
     }
   }
 
@@ -147,15 +146,15 @@ $total-column-width: $gutter + $column-width;
 
 }
 
-/* Prefix Extra Space >> #{$number-of-columns} Columns
+/* Prefix Extra Space >> #{$number-of-columns} columns
 ----------------------------------------------------------------------------------------------------*/
 
 @for $i from 1 through 24 {
   %prefix_#{$i} {
     @if $fixed-gutter {
-      margin-left: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width); /* #{unresponsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width)} */
+      margin-left: responsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
     } @else {
-      padding-left: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width); /* #{unresponsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width)} */
+      padding-left: responsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
     }
   }
   @if $semantic == false {
@@ -165,15 +164,15 @@ $total-column-width: $gutter + $column-width;
   }
 }
 
-/* Suffix Extra Space >> #{$number-of-columns} Columns
+/* Suffix Extra Space >> #{$number-of-columns} columns
 ----------------------------------------------------------------------------------------------------*/
 
 @for $i from 1 through $number-of-columns {
   %suffix_#{$i} {
     @if $fixed-gutter {
-      margin-right: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width); /* #{unresponsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width)} */
+      margin-right: responsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
     } @else {
-      padding-right: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width); /* #{unresponsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width)} */
+      padding-right: responsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
     }
   }
   @if $semantic == false {
@@ -183,12 +182,12 @@ $total-column-width: $gutter + $column-width;
   }
 }
 
-/* Push Space >> #{$number-of-columns} Columns
+/* Push Space >> #{$number-of-columns} columns
 ----------------------------------------------------------------------------------------------------*/
 
 @for $i from 1 to $number-of-columns {
   %push_#{$i} {
-    left: responsive($column-width*$i, $container-max-width); /* #{unresponsive($column-width*$i, $container-max-width)} */
+    left: responsive($total-column-width*$i, $container-max-width); /* unresponsive($total-column-width*$i, $container-max-width) */
   }
   @if $semantic == false {
     .container_#{$number-of-columns} .push_#{$i} {
@@ -197,12 +196,12 @@ $total-column-width: $gutter + $column-width;
   }
 }
 
-/* Pull Space >> #{$number-of-columns} Columns
+/* Pull Space >> #{$number-of-columns} columns
 ----------------------------------------------------------------------------------------------------*/
 
 @for $i from 1 to $number-of-columns {
   %pull_#{$i} {
-    padding-left: responsive(-($column-width*$i), $container-max-width); /* #{unresponsive(-($column-width*$i), $container-max-width)} */
+    padding-left: responsive(-($total-column-width*$i), $container-max-width); /* unresponsive(-($total-column-width*$i), $container-max-width) */
   }
   @if $semantic == false {
     .container_#{$number-of-columns} .pull_#{$i} {
@@ -211,7 +210,7 @@ $total-column-width: $gutter + $column-width;
   }
 }
 
-/* Clear Floated Elements
+/* `Clear Floated Elements
 ----------------------------------------------------------------------------------------------------*/
 
 /* http://sonspring.com/journal/clearing-floats */
@@ -223,6 +222,12 @@ $total-column-width: $gutter + $column-width;
   visibility: hidden;
   width: 0;
   height: 0;
+}
+
+@if $semantic == false {
+  .clear {
+    @extend %clear;
+  }
 }
 
 /* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
@@ -250,9 +255,6 @@ $total-column-width: $gutter + $column-width;
 }
 
 @if $semantic == false {
-  .clear {
-    @extend %clear;
-  }
   .clearfix {
     @extend %clearfix;
   }
