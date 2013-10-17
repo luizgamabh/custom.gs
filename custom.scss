@@ -25,8 +25,8 @@ $semantic: true; // Do not generate classes
 
 /* Helper Variables - Do not touch this! */
 
-$total-column-width: ($container-max-width / $number-of-columns); // Largura da coluna
-$column-width: $total-column-width - $gutter;
+$column-width: ($container-max-width / $number-of-columns) - $gutter;
+$total-column-width: $gutter + $column-width;
 
 
 /* Functions - Do not touch this! */
