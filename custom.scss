@@ -61,7 +61,6 @@ $total-column-width: $gutter + $column-width;
 %grids {
   display: inline;
   float: left;
-  position: relative;
   @if $fixed-gutter {
     @include box-sizing(border-box);
     padding-left: $gutter / 2;
@@ -96,7 +95,7 @@ $total-column-width: $gutter + $column-width;
 }
 
 @for $i from 1 through $number-of-columns {
-  %push_#{$i}, %pull_#{$i} {
+  %push_#{$i}, %pull_#{$i} { 
     @extend %pushes_pulls;
   }
   @if $semantic == false {
@@ -212,7 +211,7 @@ $total-column-width: $gutter + $column-width;
   }
 }
 
-/* `Clear Floated Elements
+/* Clear Floated Elements
 ----------------------------------------------------------------------------------------------------*/
 
 /* http://sonspring.com/journal/clearing-floats */
