@@ -95,7 +95,7 @@ $column-width: $total-column-width - $gutter;
 }
 
 @for $i from 1 through $number-of-columns {
-  %push_#{$i}, %pull_#{$i} {
+  %push_#{$i}, %pull_#{$i} { 
     @extend %pushes_pulls;
   }
   @if $semantic == false {
