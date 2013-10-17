@@ -125,6 +125,20 @@ $total-column-width: $gutter + $column-width;
   }
 }
 
+/* Grid >> Nested
+----------------------------------------------------------------------------------------------------*/
+
+%grid_parent {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+@if $semantic == false {
+  .grid_parent {
+    @extend %grid_parent;
+  }
+}
+
 /* Grid >> #{$number-of-columns} columns
 ----------------------------------------------------------------------------------------------------*/
 
