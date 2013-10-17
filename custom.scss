@@ -46,7 +46,7 @@ $column-width: $total-column-width - $gutter;
   margin-left: auto;
   margin-right: auto;
   max-width: $container-max-width;
-  width: responsive($container-max-width, $base-resolution); /* #{unresponsive($largura-maxima, $resolucao-base)} */
+  width: responsive($container-max-width, $base-resolution); /* #{unresponsive($container-max-width, $base-resolution)} */
 }
 
 @if $semantic == false {
@@ -74,8 +74,8 @@ $column-width: $total-column-width - $gutter;
       }
     }
   } @else {
-    margin-left: responsive($gutter / 2, $container-max-width); /* #{unresponsive($grid-gutter / 2, $largura-maxima)} */
-    margin-right: responsive($gutter / 2, $container-max-width); /* #{unresponsive($grid-gutter / 2, $largura-maxima)} */
+    margin-left: responsive($gutter / 2, $container-max-width); /* #{unresponsive($gutter / 2, $container-max-width)} */
+    margin-right: responsive($gutter / 2, $container-max-width); /* #{unresponsive($gutter / 2, $container-max-width)} */
   }
 }
 
@@ -126,16 +126,16 @@ $column-width: $total-column-width - $gutter;
   }
 }
 
-/* Grid >> #{$grid-qtd-colunas} colunas
+/* Grid >> #{$number-of-columns} colunas
 ----------------------------------------------------------------------------------------------------*/
 
 @for $i from 1 through $number-of-columns {
 
   %grid_#{$i} {
     @if $fixed-gutter {
-      width: responsive($total-column-width+$gutter+($column-width*($i - 1)), $container-max-width); /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+      width: responsive($total-column-width+$gutter+($column-width*($i - 1)), $container-max-width); /* #{unresponsive($total-column-width+$gutter+($column-width*($i - 1)), $container-max-width)} */
     } @else {
-      width: responsive($total-column-width+($column-width*($i - 1)), $container-max-width); /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+      width: responsive($total-column-width+($column-width*($i - 1)), $container-max-width); /* #{unresponsive($total-column-width+($column-width*($i - 1)), $container-max-width)} */
     }
   }
 
@@ -147,15 +147,15 @@ $column-width: $total-column-width - $gutter;
 
 }
 
-/* Prefix Extra Space >> #{$grid-qtd-colunas} Columns
+/* Prefix Extra Space >> #{$number-of-columns} Columns
 ----------------------------------------------------------------------------------------------------*/
 
 @for $i from 1 through 24 {
   %prefix_#{$i} {
     @if $fixed-gutter {
-      margin-left: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width); /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+      margin-left: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width); /* #{unresponsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width)} */
     } @else {
-      padding-left: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width); /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+      padding-left: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width); /* #{unresponsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width)} */
     }
   }
   @if $semantic == false {
@@ -165,15 +165,15 @@ $column-width: $total-column-width - $gutter;
   }
 }
 
-/* Suffix Extra Space >> #{$grid-qtd-colunas} Columns
+/* Suffix Extra Space >> #{$number-of-columns} Columns
 ----------------------------------------------------------------------------------------------------*/
 
 @for $i from 1 through $number-of-columns {
   %suffix_#{$i} {
     @if $fixed-gutter {
-      margin-right: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width); /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+      margin-right: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width); /* #{unresponsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width)} */
     } @else {
-      padding-right: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width); /* #{unresponsive($grid-largura-col+($grid-largura-col-gutter*($i - 1)), $largura-maxima)} */
+      padding-right: responsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width); /* #{unresponsive($total-column-width+($column-width*($i - 1))+$gutter, $container-max-width)} */
     }
   }
   @if $semantic == false {
@@ -183,12 +183,12 @@ $column-width: $total-column-width - $gutter;
   }
 }
 
-/* Push Space >> #{$grid-qtd-colunas} Columns
+/* Push Space >> #{$number-of-columns} Columns
 ----------------------------------------------------------------------------------------------------*/
 
 @for $i from 1 to $number-of-columns {
   %push_#{$i} {
-    left: responsive($column-width*$i, $container-max-width); /* #{unresponsive($grid-largura-col-gutter*$i, $largura-maxima)} */
+    left: responsive($column-width*$i, $container-max-width); /* #{unresponsive($column-width*$i, $container-max-width)} */
   }
   @if $semantic == false {
     .container_#{$number-of-columns} .push_#{$i} {
@@ -197,12 +197,12 @@ $column-width: $total-column-width - $gutter;
   }
 }
 
-/* Pull Space >> #{$grid-qtd-colunas} Columns
+/* Pull Space >> #{$number-of-columns} Columns
 ----------------------------------------------------------------------------------------------------*/
 
 @for $i from 1 to $number-of-columns {
   %pull_#{$i} {
-    padding-left: responsive(-($column-width*$i), $container-max-width); /* #{unresponsive(-($grid-largura-col-gutter*$i), $largura-maxima)} */
+    padding-left: responsive(-($column-width*$i), $container-max-width); /* #{unresponsive(-($column-width*$i), $container-max-width)} */
   }
   @if $semantic == false {
     .container_#{$number-of-columns} .pull_#{$i} {
