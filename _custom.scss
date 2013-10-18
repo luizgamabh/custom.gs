@@ -40,7 +40,7 @@ $total-column-width: $gutter + $column-width;
 /* Containers
 ----------------------------------------------------------------------------------------------------*/
 
-%container, %container_#{$number-of-columns} {
+@mixin container {
   margin-left: auto;
   margin-right: auto;
   max-width: $container-max-width;
@@ -49,7 +49,7 @@ $total-column-width: $gutter + $column-width;
 
 @if $semantic == false {
   .container_#{$number-of-columns} {
-    @extend %container;
+    @include container;
   }
 }
 
@@ -78,11 +78,8 @@ $total-column-width: $gutter + $column-width;
   }
 }
 
-@for $i from 1 through $number-of-columns {
-  %grid_#{$i} {
-    @extend %grids;
-  }
-  @if $semantic == false {
+@if $semantic == false {
+  @for $i from 1 through $number-of-columns {
     .grid_#{$i} {
       @extend %grids;
     }
@@ -93,11 +90,8 @@ $total-column-width: $gutter + $column-width;
   position: relative;
 }
 
-@for $i from 1 through $number-of-columns {
-  %push_#{$i}, %pull_#{$i} {
-    @extend %pushes_pulls;
-  }
-  @if $semantic == false {
+@if $semantic == false {
+  @for $i from 1 through $number-of-columns {
     .push_#{$i}, .pull_#{$i} {
       @extend %pushes_pulls;
     }
@@ -105,7 +99,7 @@ $total-column-width: $gutter + $column-width;
 }
 
 /* Grid >> Children (Alpha ~ First, Omega ~ Last)
-----------------------------------------------------------------------------------------------------*/
+----------------------------------------------------------------------------------------------------*//*
 
 %alpha {
   margin-left: 0;
@@ -123,57 +117,61 @@ $total-column-width: $gutter + $column-width;
   .omega {
     @extend %omega;
   }
-}
+}*/
 
 /* Grid >> Nested
 ----------------------------------------------------------------------------------------------------*/
 
-%grid_parent {
+@mixin grid_parent {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
 
 @if $semantic == false {
   .grid_parent {
-    @extend %grid_parent;
+    @include grid_parent;
   }
 }
 
 /* Grid >> #{$number-of-columns} columns
 ----------------------------------------------------------------------------------------------------*/
 
-@for $i from 1 through $number-of-columns {
-
-  %grid_#{$i} {
-    @if $fixed-gutter {
-      width: responsive($column-width+$gutter+($total-column-width*($i - 1)), $container-max-width); /* unresponsive($column-width+$gutter+($total-column-width*($i - 1)), $container-max-width) */
-    } @else {
-      width: responsive($column-width+($total-column-width*($i - 1)), $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1)), $container-max-width) */
-    }
-  }
-
-  @if $semantic == false {
+@if $semantic == false {
+  @for $i from 1 through $number-of-columns {
     .container_#{$number-of-columns} .grid_#{$i} {
-      @extend %grid_#{$i};
+      @if $fixed-gutter {
+        width: responsive($column-width+$gutter+($total-column-width*($i - 1)), $container-max-width); /* unresponsive($column-width+$gutter+($total-column-width*($i - 1)), $container-max-width) */
+      } @else {
+        width: responsive($column-width+($total-column-width*($i - 1)), $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1)), $container-max-width) */
+      }
     }
   }
+}
 
+@mixin grid($columns, $context: $number-of-columns) {
+  @extend %grids;
+  @if $fixed-gutter and $columns <= $number-of-columns and $context <= $number-of-columns {
+    width: responsive($column-width+$gutter+($total-column-width*(($columns * ($number-of-columns / $context)) - 1)), $container-max-width);
+  } @else {
+    width: responsive($column-width+($total-column-width*(($columns * ($number-of-columns / $context)) - 1)), $container-max-width);
+  }
 }
 
 /* Prefix Extra Space >> #{$number-of-columns} columns
 ----------------------------------------------------------------------------------------------------*/
 
-@for $i from 1 through 24 {
-  %prefix_#{$i} {
-    @if $fixed-gutter {
-      margin-left: responsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
-    } @else {
-      padding-left: responsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
-    }
+@mixin prefix($left, $context: $number-of-columns) {
+  @if $fixed-gutter {
+    margin-left: responsive($column-width+($total-column-width*($left - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
+  } @else {
+    padding-left: responsive($column-width+($total-column-width*($left - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
   }
-  @if $semantic == false {
+}
+
+@if $semantic == false {
+  @for $i from 1 through 24 {
     .container_#{$number-of-columns} .prefix_#{$i} {
-      @extend %prefix_#{$i};
+      @include prefix($i);
     }
   }
 }
@@ -181,17 +179,18 @@ $total-column-width: $gutter + $column-width;
 /* Suffix Extra Space >> #{$number-of-columns} columns
 ----------------------------------------------------------------------------------------------------*/
 
-@for $i from 1 through $number-of-columns {
-  %suffix_#{$i} {
-    @if $fixed-gutter {
-      margin-right: responsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
-    } @else {
-      padding-right: responsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
-    }
+@mixin suffix($right, $context: $number-of-columns) {
+  @if $fixed-gutter {
+    margin-right: responsive($column-width+($total-column-width*($right - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
+  } @else {
+    padding-right: responsive($column-width+($total-column-width*($right - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
   }
+}
+
+@for $i from 1 through $number-of-columns {
   @if $semantic == false {
     .container_#{$number-of-columns} .suffix_#{$i} {
-      @extend %suffix_#{$i};
+      @include suffix($i);
     }
   }
 }
@@ -199,29 +198,35 @@ $total-column-width: $gutter + $column-width;
 /* Push Space >> #{$number-of-columns} columns
 ----------------------------------------------------------------------------------------------------*/
 
-@for $i from 1 to $number-of-columns {
-  %push_#{$i} {
-    left: responsive($total-column-width*$i, $container-max-width); /* unresponsive($total-column-width*$i, $container-max-width) */
-  }
-  @if $semantic == false {
+@if $semantic == false {
+  @for $i from 1 to $number-of-columns {
     .container_#{$number-of-columns} .push_#{$i} {
-      @extend %push_#{$i};
+      left: responsive($total-column-width*$i, $container-max-width); /* unresponsive($total-column-width*$i, $container-max-width) */
     }
   }
 }
 
+@mixin push($left) {
+  @extend %pushes_pulls;
+  left: responsive($total-column-width*$left, $container-max-width);
+}
+
+
+
 /* Pull Space >> #{$number-of-columns} columns
 ----------------------------------------------------------------------------------------------------*/
 
-@for $i from 1 to $number-of-columns {
-  %pull_#{$i} {
-    padding-left: responsive(-($total-column-width*$i), $container-max-width); /* unresponsive(-($total-column-width*$i), $container-max-width) */
-  }
-  @if $semantic == false {
+@if $semantic == false {
+  @for $i from 1 to $number-of-columns {
     .container_#{$number-of-columns} .pull_#{$i} {
-      @extend %pull_#{$i};
+      padding-left: responsive(-($total-column-width*$i), $container-max-width); /* unresponsive(-($total-column-width*$i), $container-max-width) */
     }
   }
+}
+
+@mixin pull($right) {
+  @extend %pushes_pulls;
+  left: responsive(-($total-column-width*$right), $container-max-width); /* unresponsive(-($total-column-width*$i), $container-max-width) */
 }
 
 /* `Clear Floated Elements
@@ -229,7 +234,7 @@ $total-column-width: $gutter + $column-width;
 
 /* http://sonspring.com/journal/clearing-floats */
 
-%clear {
+@mixin clear {
   clear: both;
   display: block;
   overflow: hidden;
@@ -240,13 +245,16 @@ $total-column-width: $gutter + $column-width;
 
 @if $semantic == false {
   .clear {
-    @extend %clear;
+    @include clear;
   }
 }
 
 /* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
 
-%clearfix {
+@mixin clearfix {
+  @if $ie7-support {
+    zoom: 1;
+  }
   &:before,
   &:after {
     content: '\0020';
@@ -256,20 +264,14 @@ $total-column-width: $gutter + $column-width;
     width: 0;
     height: 0;
   }
-}
-
-%clearfix:after {
-  clear: both;
-}
-
-@if $ie7-support {
-  %clearfix {
-    zoom: 1;
+  &:after {
+    clear: both;
   }
 }
 
+
 @if $semantic == false {
   .clearfix {
-    @extend %clearfix;
+    @include clearfix;
   }
 }
