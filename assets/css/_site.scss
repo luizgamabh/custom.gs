@@ -1,0 +1,51 @@
+@import "compass";
+@import "compass/reset";
+
+/* Vars */
+$debug: false;
+$cor-sutil: #ccc;
+$experimental-support-for-svg: false;
+$base-font-size: 25px;
+$base-line-height: 30px;
+@include establish-baseline;
+
+/* Fontes */
+@include font-face('custom', font-files('custom.woff', 'custom.ttf', 'custom.svg'), 'custom.eot', normal, normal);
+
+/* Grid */
+@import "custom";
+
+html, body {
+  height: 100%;
+}
+
+body {
+  @include background(linear-gradient(top, #ffd200 0%, #ffee30 100%));
+  color: #fff;
+  @if $debug {
+    $grid-background-baseline-color: $cor-sutil;
+    $grid-background-baseline-height: $base-line-height;
+    @include baseline-grid-background;
+  }
+}
+
+header {
+  @include padding-leader(4);
+  text-align: center;
+}
+
+@for $i from 1 through 6 {
+  h#{$i} {
+    @include text-shadow(1px 1px 2px rgba(0, 0, 0, .15));
+  }
+}
+
+h1 {
+  font-family: 'custom';
+  @include adjust-font-size-to(100px);
+}
+
+h2 {
+  font-family: 'Josefin Slab';
+  @include adjust-font-size-to(50px);
+}

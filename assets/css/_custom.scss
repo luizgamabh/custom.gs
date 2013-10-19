@@ -1,0 +1,277 @@
+@charset "UTF-8";
+@import "compass";
+
+/*!
+    Custom Grid System 1.0.0 - http://custom.gs/
+
+    Custom Grid System is a new Sass based grid system that combines best practices of:
+     * 960 Grid System - http://960.gs/
+     * Unsemantic - http://unsemantic.com/
+     * Twitter Bootstrap - http://getbootstrap.com/
+     * Semantic - http://semantic.gs/
+    Licensed under GPL and MIT.
+*/
+
+/* CustomGS Setup Variables */
+
+$base-resolution: 1250px; // Container max-width will get 100% from this resolution
+$container-max-width: 1200px; // Container max width
+$number-of-columns: 24; // Grid columns amount
+$gutter: 16px; // Gutter (space between columns)
+$fixed-gutter: true; // Gutter will not change within fluid columns
+$ie7-support: true; // Support to IE7
+$semantic: true; // Do not generate classes
+
+/* Helper Variables - Do not touch this! */
+
+$column-width: ($container-max-width / $number-of-columns) - $gutter;
+$total-column-width: $gutter + $column-width;
+
+/* Functions - Do not touch this! */
+
+@function responsive($target, $context) {
+  @return ($target / $context) * 100%;
+}
+
+@function unresponsive($target, $context) {
+  @return "#{$target}/#{$context}";
+}
+
+/* Containers
+----------------------------------------------------------------------------------------------------*/
+
+@mixin container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: $container-max-width;
+  width: responsive($container-max-width, $base-resolution); /* unresponsive($container-max-width, $base-resolution) */
+}
+
+@if $semantic == false {
+  .container_#{$number-of-columns} {
+    @include container;
+  }
+}
+
+/* Grids
+----------------------------------------------------------------------------------------------------*/
+
+%grids {
+  display: inline;
+  float: left;
+  position: relative;
+  @if $fixed-gutter {
+    @include box-sizing(border-box);
+    padding-left: $gutter / 2;
+    padding-right: $gutter / 2;
+    @if $ie7-support {
+      *padding-left: 0;
+      *padding-right: 0;
+      & > * {
+        *margin-left: expression((!this.className.match(/grid-[1-9]+/) && this.currentStyle.display === "block" && this.currentStyle.width === "auto") && "#{$gutter / 2}");
+        *margin-right: expression((!this.className.match(/grid-[1-9]+/) && this.currentStyle.display === "block" && this.currentStyle.width === "auto") && "#{$gutter / 2}");
+      }
+    }
+  } @else {
+    margin-left: responsive($gutter / 2, $container-max-width); /* unresponsive($gutter / 2, $container-max-width) */
+    margin-right: responsive($gutter / 2, $container-max-width); /* unresponsive($gutter / 2, $container-max-width) */
+  }
+}
+
+@if $semantic == false {
+  @for $i from 1 through $number-of-columns {
+    .grid_#{$i} {
+      @extend %grids;
+    }
+  }
+}
+
+%pushes_pulls {
+  position: relative;
+}
+
+@if $semantic == false {
+  @for $i from 1 through $number-of-columns {
+    .push_#{$i}, .pull_#{$i} {
+      @extend %pushes_pulls;
+    }
+  }
+}
+
+/* Grid >> Children (Alpha ~ First, Omega ~ Last)
+----------------------------------------------------------------------------------------------------*//*
+
+%alpha {
+  margin-left: 0;
+}
+
+%omega {
+  margin-right: 0;
+}
+
+@if $semantic == false {
+  .alpha {
+    @extend %alpha;
+  }
+
+  .omega {
+    @extend %omega;
+  }
+}*/
+
+/* Grid >> Nested
+----------------------------------------------------------------------------------------------------*/
+
+@mixin grid_parent {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+@if $semantic == false {
+  .grid_parent {
+    @include grid_parent;
+  }
+}
+
+/* Grid >> #{$number-of-columns} columns
+----------------------------------------------------------------------------------------------------*/
+
+@if $semantic == false {
+  @for $i from 1 through $number-of-columns {
+    .container_#{$number-of-columns} .grid_#{$i} {
+      @if $fixed-gutter {
+        width: responsive($column-width+$gutter+($total-column-width*($i - 1)), $container-max-width); /* unresponsive($column-width+$gutter+($total-column-width*($i - 1)), $container-max-width) */
+      } @else {
+        width: responsive($column-width+($total-column-width*($i - 1)), $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1)), $container-max-width) */
+      }
+    }
+  }
+}
+
+@mixin grid($columns, $context: $number-of-columns) {
+  @extend %grids;
+  @if $fixed-gutter and $columns <= $number-of-columns and $context <= $number-of-columns {
+    width: responsive($column-width+$gutter+($total-column-width*(($columns * ($number-of-columns / $context)) - 1)), $container-max-width);
+  } @else {
+    width: responsive($column-width+($total-column-width*(($columns * ($number-of-columns / $context)) - 1)), $container-max-width);
+  }
+}
+
+/* Prefix Extra Space >> #{$number-of-columns} columns
+----------------------------------------------------------------------------------------------------*/
+
+@mixin prefix($left, $context: $number-of-columns) {
+  @if $fixed-gutter {
+    margin-left: responsive($column-width+($total-column-width*($left - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
+  } @else {
+    padding-left: responsive($column-width+($total-column-width*($left - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
+  }
+}
+
+@if $semantic == false {
+  @for $i from 1 through 24 {
+    .container_#{$number-of-columns} .prefix_#{$i} {
+      @include prefix($i);
+    }
+  }
+}
+
+/* Suffix Extra Space >> #{$number-of-columns} columns
+----------------------------------------------------------------------------------------------------*/
+
+@mixin suffix($right, $context: $number-of-columns) {
+  @if $fixed-gutter {
+    margin-right: responsive($column-width+($total-column-width*($right - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
+  } @else {
+    padding-right: responsive($column-width+($total-column-width*($right - 1))+$gutter, $container-max-width); /* unresponsive($column-width+($total-column-width*($i - 1))+$gutter, $container-max-width) */
+  }
+}
+
+@for $i from 1 through $number-of-columns {
+  @if $semantic == false {
+    .container_#{$number-of-columns} .suffix_#{$i} {
+      @include suffix($i);
+    }
+  }
+}
+
+/* Push Space >> #{$number-of-columns} columns
+----------------------------------------------------------------------------------------------------*/
+
+@if $semantic == false {
+  @for $i from 1 to $number-of-columns {
+    .container_#{$number-of-columns} .push_#{$i} {
+      left: responsive($total-column-width*$i, $container-max-width); /* unresponsive($total-column-width*$i, $container-max-width) */
+    }
+  }
+}
+
+@mixin push($left) {
+  @extend %pushes_pulls;
+  left: responsive($total-column-width*$left, $container-max-width);
+}
+
+
+
+/* Pull Space >> #{$number-of-columns} columns
+----------------------------------------------------------------------------------------------------*/
+
+@if $semantic == false {
+  @for $i from 1 to $number-of-columns {
+    .container_#{$number-of-columns} .pull_#{$i} {
+      padding-left: responsive(-($total-column-width*$i), $container-max-width); /* unresponsive(-($total-column-width*$i), $container-max-width) */
+    }
+  }
+}
+
+@mixin pull($right) {
+  @extend %pushes_pulls;
+  left: responsive(-($total-column-width*$right), $container-max-width); /* unresponsive(-($total-column-width*$i), $container-max-width) */
+}
+
+/* `Clear Floated Elements
+----------------------------------------------------------------------------------------------------*/
+
+/* http://sonspring.com/journal/clearing-floats */
+
+@mixin clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+@if $semantic == false {
+  .clear {
+    @include clear;
+  }
+}
+
+/* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
+
+@mixin clearfix {
+  @if $ie7-support {
+    zoom: 1;
+  }
+  &:before,
+  &:after {
+    content: '\0020';
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+
+@if $semantic == false {
+  .clearfix {
+    @include clearfix;
+  }
+}
