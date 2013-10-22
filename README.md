@@ -13,26 +13,28 @@ UNSEMANTIC MODE:
 
 
 ```html
-<div class="container_52">
-    <div class="grid_32">
+<div id="main" class="container_52">
+    <section class="grid_32">
         First column
-    </div>
-    <div class="grid_20">
+    </section>
+    <aside class="grid_20">
         Second Column
-    </div>
+    </aside>
 </div>
 ```
 
 SEMANTIC MODE (same result without many classes messing your code):
 
-    div#main
-      +container_52
+```sass
+div#main
+  +container_52
 
-    section
-      +grid_32
+section
+  +grid_32
 
-    aside
-      +grid_20
+aside
+  +grid_20
+```
 
 ```html
 <div id="main">
