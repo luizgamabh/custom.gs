@@ -9,7 +9,9 @@ Custom Grid System is a new Sass (and Less ASAP) based grid system that combines
 
 Custom.gs works with columns rather than percentages, anyway you can set-up many columns as you need. Eg.:
 
-UNSEMANTIC MODE:
+## How it works?
+
+###UNSEMANTIC MODE
 
 Let's look at `custom.sass` file:
 ```sass
@@ -27,7 +29,7 @@ $semantic: false
 </div>
 ```
 
-SEMANTIC MODE (same result without many classes messing your code):
+###SEMANTIC MODE (same result without many classes messing your code)
 
 `custom.sass`
 ```sass
