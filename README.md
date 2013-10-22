@@ -11,6 +11,10 @@ Custom.gs works with columns rather than percentages, anyway you can set-up many
 
 UNSEMANTIC MODE:
 
+`custom.sass`
+```sass
+$semantic: false
+```
 
 ```html
 <div id="main" class="container_52">
@@ -25,7 +29,15 @@ UNSEMANTIC MODE:
 
 SEMANTIC MODE (same result without many classes messing your code):
 
+`custom.sass`
 ```sass
+$semantic: true
+```
+
+`my_website.sass`:
+```sass
+@import "custom"
+
 div#main
   +container_52
 
