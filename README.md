@@ -11,7 +11,7 @@ Custom.gs works with columns rather than percentages, anyway you can set-up many
 
 ## How it works?
 
-###UNSEMANTIC MODE
+### UNSEMANTIC MODE
 
 Let's look at `custom.sass` file:
 ```sass
@@ -29,7 +29,7 @@ $semantic: false
 </div>
 ```
 
-###SEMANTIC MODE (same result without many classes messing your code)
+### SEMANTIC MODE (same result without many classes messing your code)
 
 `custom.sass`
 ```sass
@@ -64,3 +64,14 @@ aside
 ## Information
 
 ### Options
+
+
+## Recomendations
+
+### Increase the accuracy of the relative measures
+
+It is highly recommended that you work with precision when dealing with measures. At your `compass.rb` or `config.rb` file, add the following line:
+
+```ruby
+Sass::Script::Number.precision = 10
+```
