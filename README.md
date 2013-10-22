@@ -11,7 +11,7 @@ Custom.gs works with columns rather than percentages, anyway you can set-up many
 
 UNSEMANTIC MODE:
 
-`custom.sass`
+Let's look at `custom.sass` file:
 ```sass
 $semantic: false
 ```
