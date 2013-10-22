@@ -65,15 +65,13 @@ aside
 
 ### Option variables:
 
-* `$semantic`: Generates (false) or not (true) css classes. default: true
-* `$container-max-width`: Max width of container
-* `$base-resolution`: Container max width will get 100% from this resolution
-* `$number-of-columns`: Grid columns amount
-* `$gutter`: Space between columns
-* `$fixed-gutter`: Gutter will not resize within fluid columns
-    `$ie7-support`: boolean
-    default: true
-    Supports wtf IE7- version
+* `$semantic`: boolean, default: true. Description: Generates (if false) or not (if true, semantic mode) css classes.
+* `$container-max-width`: measure in px. Description: Max width of container
+* `$base-resolution`: measure in px. Description: Container max width will get 100% from this resolution
+* `$number-of-columns`: integer. Description: Grid columns amount
+* `$gutter`: measure in px. Description: Space between columns
+* `$fixed-gutter`: boolean, default: true Description: Gutter will not resize within fluid columns
+* `$ie7-support`: boolean, default: true. Description: Supports wtf IE7- version
 
 
 ## Recomendations
