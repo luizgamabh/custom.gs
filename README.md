@@ -63,7 +63,17 @@ aside
 
 ## Information
 
-### Options
+### Option variables:
+
+* `$semantic`: Generates (false) or not (true) css classes. default: true
+* `$container-max-width`: Max width of container
+* `$base-resolution`: Container max width will get 100% from this resolution
+* `$number-of-columns`: Grid columns amount
+* `$gutter`: Space between columns
+* `$fixed-gutter`: Gutter will not resize within fluid columns
+    `$ie7-support`: boolean
+    default: true
+    Supports wtf IE7- version
 
 
 ## Recomendations
