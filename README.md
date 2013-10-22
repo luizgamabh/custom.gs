@@ -1,4 +1,4 @@
-![Custom Grid System](https://raw.github.com/luizgamabh/custom.gs/master/assets/logo.png)
+![Custom Grid System](https://raw.github.com/luizgamabh/custom.gs/master/assets/img/logo.png)
 
 Custom Grid System is a new Sass (and Less ASAP) based grid system that combines best practices of:
 
