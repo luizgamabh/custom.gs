@@ -62,6 +62,21 @@ aside
 </div>
 ```
 
+### NESTED GRIDS
+
+```html
+<div id="nested" class="grid_parent">
+    ...nested grids
+</div>
+```
+
+or
+
+```sass
+div#nested
+  +grid_parent
+```
+
 ## Information
 
 ### Option variables:
