@@ -21,6 +21,7 @@ $gutter: 16px; // Gutter (space between columns)
 $fixed-gutter: true; // Gutter will not change within fluid columns
 $ie7-support: true; // Support to IE7
 $semantic: true; // Do not generate classes
+$fluid: true; // Fluid columns?
 
 /* Helper Variables - Do not touch this! */
 
@@ -30,7 +31,11 @@ $total-column-width: $gutter + $column-width;
 /* Functions - Do not touch this! */
 
 @function responsive($target, $context) {
-  @return ($target / $context) * 100%;
+  @if $fluid {
+    @return ($target / $context) * 100%;
+  } @else {
+    @return $target;
+  }
 }
 
 @function unresponsive($target, $context) {
