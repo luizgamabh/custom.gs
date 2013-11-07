@@ -88,6 +88,7 @@ div#nested
 * `$gutter`: measure in px. Description: Space between columns
 * `$fixed-gutter`: boolean, default: true Description: Gutter will not resize within fluid columns
 * `$ie7-support`: boolean, default: true. Description: Supports wtf IE7- version
+* `$fluid`: boolean, default: true. Description: Works (if true) or not (if false) with relative measures.
 
 
 ## Recomendations
