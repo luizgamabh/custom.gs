@@ -17,9 +17,9 @@
 $base-resolution: 1250px; // Container max-width will get 100% from this resolution
 $container-max-width: 1200px; // Container max width
 $number-of-columns: 24; // Grid columns amount
-$fluid: true; // Fluid columns?
+$fluid: false; // Fluid columns?
 $gutter: 16px; // Gutter (space between columns)
-$fixed-gutter: false; // Gutter will not change within fluid columns
+$fixed-gutter: true; // Gutter will not change within fluid columns
 $ie7-support: false; // Support to IE7
 $semantic: true; // Do not generate classes
 
@@ -27,6 +27,7 @@ $semantic: true; // Do not generate classes
 
 $column-width: ($container-max-width / $number-of-columns) - $gutter;
 $total-column-width: $gutter + $column-width;
+$fixed-gutter: if($fluid, $fixed-gutter, false);
 
 /* Functions - Do not touch this! */
 
@@ -173,9 +174,9 @@ $total-column-width: $gutter + $column-width;
     width: responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width); /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
   } @else {
     @if $context == $number-of-columns {
-      width: responsive($column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width); /* #{unresponsive($column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
-    } @else {
       width: responsive($column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width);
+    } @else {
+      width: responsive($column-width * $columns + ($gutter * ($columns - 1)), $context * $total-column-width - $gutter);
     }
     @if $fluid and $context != $number-of-columns {
       margin-left: responsive($gutter / 2, $total-column-width * $context - $gutter); /* #{unresponsive($gutter / 2, $total-column-width * $context - $gutter)} */
