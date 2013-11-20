@@ -31,8 +31,9 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
 
 /* Functions - Do not touch this! */
 
-@function responsive($target, $context) {
+@function responsive($target, $context, $measure: "%") {
   @if $fluid {
+    $measure: if($measure=="%",100%,1em);
     @return ($target / $context) * 100%;
   } @else {
     @return $target;
