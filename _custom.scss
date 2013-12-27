@@ -16,6 +16,7 @@
 
 $base-resolution: 1250px; // Container max-width will get 100% from this resolution
 $container-max-width: 1200px; // Container max width
+$min-resolution: false; // false or px value
 $number-of-columns: 24; // Grid columns amount
 $fluid: false; // Fluid columns?
 $gutter: 16px; // Gutter (space between columns)
@@ -55,6 +56,9 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
   margin-left: auto;
   margin-right: auto;
   max-width: $container-max-width;
+  @if $min-resolution {
+    min-width: $min-resolution;
+  }
   width: responsive($container-max-width, $base-resolution); /* #{unresponsive($container-max-width, $base-resolution)} */
 }
 
