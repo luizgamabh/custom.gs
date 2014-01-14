@@ -18,7 +18,7 @@ $base-resolution: 1250px; // Container max-width will get 100% from this resolut
 $container-max-width: 1200px; // Container max width
 $min-resolution: false; // false or px value
 $number-of-columns: 24; // Grid columns amount
-$fluid: false; // Fluid columns?
+$fluid: true; // Fluid columns?
 $gutter: 16px; // Gutter (space between columns)
 $fixed-gutter: true; // Gutter will not change within fluid columns
 $ie7-support: false; // Support to IE7
@@ -55,11 +55,12 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
 @mixin container {
   margin-left: auto;
   margin-right: auto;
-  max-width: $container-max-width;
-  @if $min-resolution {
-    min-width: $min-resolution;
+  @if $fluid {
+    max-width: $container-max-width;
+    width: responsive($container-max-width, $base-resolution); /* #{unresponsive($container-max-width, $base-resolution)} */
+  } @else {
+    width: $container-max-width;
   }
-  width: responsive($container-max-width, $base-resolution); /* #{unresponsive($container-max-width, $base-resolution)} */
 }
 
 @if $semantic == false {
