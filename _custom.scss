@@ -2,7 +2,7 @@
 @import "compass";
 
 /*!
-    Custom Grid System 1.0.0 - http://custom.gs/
+    Custom Grid System 1.2.17 - http://custom.gs/
 
     Custom Grid System is a new Sass based grid system that combines best practices of:
      * 960 Grid System - http://960.gs/
@@ -16,11 +16,11 @@
 
 $base-resolution: 1250px; // Container max-width will get 100% from this resolution
 $container-max-width: 1200px; // Container max width
+$min-resolution: false; // false or px value
 $number-of-columns: 24; // Grid columns amount
-$fluid: false; // Fluid columns?
+$fluid: true; // Fluid columns?
 $gutter: 16px; // Gutter (space between columns)
 $fixed-gutter: true; // Gutter will not change within fluid columns
-$ie7-support: false; // Support to IE7
 $semantic: true; // Do not generate classes
 
 /* Helper Variables - Do not touch this! */
@@ -54,8 +54,12 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
 @mixin container {
   margin-left: auto;
   margin-right: auto;
-  max-width: $container-max-width;
-  width: responsive($container-max-width, $base-resolution); /* #{unresponsive($container-max-width, $base-resolution)} */
+  @if $fluid {
+    max-width: $container-max-width;
+    width: responsive($container-max-width, $base-resolution); /* #{unresponsive($container-max-width, $base-resolution)} */
+  } @else {
+    width: $container-max-width;
+  }
 }
 
 @if $semantic == false {
@@ -67,7 +71,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
 /* Grids
 ----------------------------------------------------------------------------------------------------*/
 
-%grids {
+@mixin grids {
   display: inline;
   float: left;
   position: relative;
@@ -75,14 +79,6 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
     @include box-sizing(border-box);
     padding-left: $gutter / 2;
     padding-right: $gutter / 2;
-    @if $ie7-support {
-      *padding-left: 0 !important;
-      *padding-right: 0 !important;
-      & > * {
-        *margin-left: expression((this.currentStyle.display === "block" && this.currentStyle.width === "auto") && "#{$gutter / 2}");
-        *margin-right: expression((this.currentStyle.display === "block" && this.currentStyle.width === "auto") && "#{$gutter / 2}");
-      }
-    }
   } @else {
     margin-left: responsive($gutter / 2, $container-max-width); /* #{unresponsive($gutter / 2, $container-max-width)} */
     margin-right: responsive($gutter / 2, $container-max-width); /* #{unresponsive($gutter / 2, $container-max-width)} */
@@ -92,7 +88,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
 @if $semantic == false {
   @for $i from 1 through $number-of-columns {
     .grid_#{$i} {
-      @extend %grids;
+      @include grids;
     }
   }
 }
@@ -169,7 +165,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
 }
 
 @mixin grid($columns, $context: $number-of-columns) {
-  @extend %grids;
+  @include grids;
   $fluider: if($fluid, $number-of-columns / $context, 1);
   @if $fixed-gutter {
     width: responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width); /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
@@ -281,9 +277,6 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
 /* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
 
 @mixin clearfix {
-  @if $ie7-support {
-    zoom: 1;
-  }
   &:before,
   &:after {
     content: '\0020';
