@@ -297,3 +297,9 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
     @include clearfix;
   }
 }
+
+// Helpers!!!
+
+@function absolute-column-space($columns) {
+  @return $columns * $total-column-width + ($gutter / 2)
+}
