@@ -42,13 +42,13 @@ $semantic: true
 @import "custom"
 
 div#main
-  +container_52
+  +container(52)
 
 section
-  +grid_32
+  +grid(32)
 
 aside
-  +grid_20
+  +grid(20)
 ```
 
 ```html
