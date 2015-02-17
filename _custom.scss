@@ -2,7 +2,7 @@
 @import "compass";
 
 /*!
-    Custom Grid System 2.0.1 - http://custom.gs/
+    Custom Grid System 2.1.0 - http://custom.gs/
 
     Custom Grid System is a new Sass based grid system that combines best practices of:
      * 960 Grid System - http://960.gs/
@@ -14,12 +14,12 @@
 
 /* CustomGS Setup Variables */
 
-$base-resolution: 1200px; // Container max-width will get 100% from this resolution
-$container-max-width: 1024px; // Container max width
+$base-resolution: 1300px; // Container max-width will get 100% from this resolution
+$container-max-width: 1280px; // Container max width
 $min-resolution: false; // false or px value
-$number-of-columns: 16; // Grid columns amount
+$number-of-columns: 8; // Grid columns amount
 $fluid: true; // Fluid columns?
-$gutter: 16px; // Gutter (space between columns)
+$gutter: 24px; // Gutter (space between columns)
 $fixed-gutter: true; // Gutter will not change within fluid columns
 $semantic: true; // Do not generate classes
 
@@ -71,9 +71,14 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
 /* Grids
 ----------------------------------------------------------------------------------------------------*/
 
-@mixin grids($gutter: $gutter) {
+@mixin grids($direction: 'ltr', $gutter: $gutter) {
   display: inline;
-  float: left;
+  @if $direction == 'ltr' {
+    float: left;
+  }
+  @else if $direction == 'rtl' {
+    float: right;
+  }
   position: relative;
   @if $fixed-gutter {
     @include box-sizing(border-box);
@@ -164,10 +169,10 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
   }
 }
 
-@mixin grid($columns, $context: $number-of-columns, $gutter: $gutter) {
+@mixin grid($columns, $context: $number-of-columns, $direction: 'ltr', $gutter: $gutter) {
   $column-width: ($container-max-width / $number-of-columns) - $gutter;
   $total-column-width: $gutter + $column-width;
-  @include grids($gutter);
+  @include grids($direction, $gutter);
   $fluider: if($fluid, $number-of-columns / $context, 1);
   @if $fixed-gutter {
     width: responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width); /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
