@@ -1,0 +1,22 @@
+{
+  "name": "custom.gs",
+  "version": "2.1.0",
+  "homepage": "http://custom.gs",
+  "authors": [
+    "Luiz Gustavo Freire Gama <luizgamabh@gmail.com>"
+  ],
+  "description": "Custom Grid System",
+  "main": "_custom.scss",
+  "keywords": [
+    "grid",
+    "responsive"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
