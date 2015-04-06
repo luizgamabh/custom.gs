@@ -169,7 +169,17 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
   }
 }
 
-@mixin grid($columns, $context: $number-of-columns, $direction: 'ltr', $gutter: $gutter) {
+@mixin grid_clear($columns, $direction) {
+  &:nth-child(#{$columns}n+1) {
+    @if ($direction == 'ltr') {
+      clear: left
+    } @else {
+      clear: right
+    }
+  }
+}
+
+@mixin grid($columns, $context: $number-of-columns, $direction: 'ltr', $gutter: $gutter, $clear: false) {
   $column-width: ($container-max-width / $number-of-columns) - $gutter;
   $total-column-width: $gutter + $column-width;
   @include grids($direction, $gutter);
@@ -186,6 +196,9 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
       margin-left: responsive($gutter / 2, $total-column-width * $context - $gutter); /* #{unresponsive($gutter / 2, $total-column-width * $context - $gutter)} */
       margin-right: responsive($gutter / 2, $total-column-width * $context - $gutter); /* #{unresponsive($gutter / 2, $total-column-width * $context - $gutter)} */
     }
+  }
+  @if ($clear) {
+    @include grid_clear($context, $direction);
   }
 }
 
