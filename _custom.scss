@@ -169,17 +169,20 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
   }
 }
 
-@mixin grid_clear($columns, $direction) {
-  &:nth-child(#{$columns}n+1) {
-    @if ($direction == 'ltr') {
-      clear: left
-    } @else {
-      clear: right
-    }
-  }
-}
+@mixin grid($columns, $context: $number-of-columns, $options: ()) {
+  //$direction: 'ltr', $gutter: $gutter, $clear: false, $release-others: false
 
-@mixin grid($columns, $context: $number-of-columns, $direction: 'ltr', $gutter: $gutter, $clear: false) {
+  // Default values:
+  $direction: if(map-has-key($options, "direction"), map-get($options, "direction"), 'ltr');
+  $gutter: if(map-has-key($options, "gutter"), map-get($options, "gutter"), $gutter);
+  $clear: if(map-has-key($options, "clear"), map-get($options, "clear"), false);
+  $release-others: if(map-has-key($options, "release"), map-get($options, "release"), false);
+  $debug: if(map-has-key($options, "debug"), map-get($options, "debug"), false);
+  @if ($debug) {
+    @debug "Direction: #{$direction} / Gutter: #{$gutter} / Clear: #{$clear} / Release: #{$release-others}";
+  }
+  // End
+
   $column-width: ($container-max-width / $number-of-columns) - $gutter;
   $total-column-width: $gutter + $column-width;
   @include grids($direction, $gutter);
@@ -198,7 +201,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
     }
   }
   @if ($clear) {
-    @include grid_clear($context, $direction);
+    @include grid_clear($context, $direction, $release-others);
   }
 }
 
@@ -318,8 +321,44 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
   }
 }
 
+@mixin grid_clear($columns, $direction, $release-others: false) {
+  @if $release-others {
+    &:nth-child(n) {
+      clear: none;
+    }
+  }
+  &:nth-child(#{$columns}n+1) {
+    @if ($direction == 'ltr') {
+      clear: left;
+    } @else {
+      clear: right;
+    }
+  }
+}
+
 // Helpers!!!
 
 @function absolute-column-space($columns) {
-  @return $columns * $total-column-width + ($gutter / 2)
+  $space: $columns * $total-column-width + ($gutter / 2);
+  $width: $columns * $total-column-width;
+  @return $space, $width;
+}
+
+@mixin grid_sidebar($size, $position: 'left', $class-view: 'view', $class-sidebar: 'sidebar', $grid_parent: true) {
+  $measures: absolute-column-space($size);
+  @include clearfix;
+  .#{$class-view} {
+    @include box-sizing(border-box);
+    float: if($position == 'left', right, left);
+    width: 100%;
+    padding-#{if($position == 'left', left, right)}: if($grid_parent, nth($measures, 1), nth($measures, 1) + ($gutter / 2));
+    @if not $grid_parent {
+      padding-#{if($position == 'left', right, left)}: $gutter / 2;
+    }
+  }
+  .#{$class-sidebar} {
+    float: if($position == 'left', left, right);
+    width: nth($measures, 2);
+    margin-#{if($position == 'left', right, left)}: -(nth($measures, 2));
+  }
 }
