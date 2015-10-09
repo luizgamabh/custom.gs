@@ -1,6 +1,5 @@
 {
   "name": "custom.gs",
-  "version": "2.1.1",
   "homepage": "http://custom.gs",
   "authors": [
     "Luiz Gustavo Freire Gama <luizgamabh@gmail.com>"
@@ -9,14 +8,17 @@
   "main": "_custom.scss",
   "keywords": [
     "grid",
-    "responsive"
+    "system",
+    "semantic",
+    "unsemantic",
+    "responsive",
+    "custom",
+    "sass"
   ],
   "license": "MIT",
   "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "**/*",
+    "!_custom.scss",
+    "!README.md"
   ]
 }
