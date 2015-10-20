@@ -2,7 +2,7 @@
 @import "compass";
 
 /*!
-    Custom Grid System 2.1.0 - http://custom.gs/
+    Custom Grid System 2.2.0 - http://custom.gs/
 
     Custom Grid System is a new Sass based grid system that combines best practices of:
      * 960 Grid System - http://960.gs/
@@ -14,14 +14,14 @@
 
 /* CustomGS Setup Variables */
 
-$base-resolution: 1300px; // Container max-width will get 100% from this resolution
-$container-max-width: 1280px; // Container max width
-$min-resolution: false; // false or px value
-$number-of-columns: 8; // Grid columns amount
-$fluid: true; // Fluid columns?
-$gutter: 24px; // Gutter (space between columns)
-$fixed-gutter: true; // Gutter will not change within fluid columns
-$semantic: true; // Do not generate classes
+$base-resolution: 1250px;
+$container-max-width: 1200px;
+$min-resolution: false;
+$number-of-columns: 10;
+$fluid: true;
+$gutter: 16px;
+$fixed-gutter: true;
+$semantic: true;
 
 /* Helper Variables - Do not touch this! */
 
@@ -48,17 +48,37 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
   }
 }
 
+@mixin gutter($_gutter: $gutter) {
+  @if $fixed-gutter {
+    @include box-sizing(border-box);
+    padding-left: $_gutter / 2;
+    padding-right: $_gutter / 2;
+  } @else {
+    margin-left: responsive($_gutter / 2, $container-max-width); /* #{unresponsive($gutter / 2, $container-max-width)} */
+    margin-right: responsive($_gutter / 2, $container-max-width); /* #{unresponsive($gutter / 2, $container-max-width)} */
+  }
+}
+
 /* Containers
 ----------------------------------------------------------------------------------------------------*/
 
-@mixin container {
+@mixin container($clear: false) {
   margin-left: auto;
   margin-right: auto;
   @if $fluid {
-    max-width: $container-max-width;
-    width: responsive($container-max-width, $base-resolution); /* #{unresponsive($container-max-width, $base-resolution)} */
+    @if $clear == 'clear' {
+      width: 100%;
+      max-width: inherit;
+    } @else {
+      max-width: $container-max-width;
+      width: responsive($container-max-width, $base-resolution); /* #{unresponsive($container-max-width, $base-resolution)} */
+    }
   } @else {
-    width: $container-max-width;
+    @if $clear == 'clear' {
+      width: 100%;
+    } @else {
+      width: $container-max-width;
+    }
   }
 }
 
@@ -80,14 +100,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
     float: right;
   }
   position: relative;
-  @if $fixed-gutter {
-    @include box-sizing(border-box);
-    padding-left: $gutter / 2;
-    padding-right: $gutter / 2;
-  } @else {
-    margin-left: responsive($gutter / 2, $container-max-width); /* #{unresponsive($gutter / 2, $container-max-width)} */
-    margin-right: responsive($gutter / 2, $container-max-width); /* #{unresponsive($gutter / 2, $container-max-width)} */
-  }
+  @include gutter($gutter);
 }
 
 @if $semantic == false {
@@ -362,3 +375,4 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
     margin-#{if($position == 'left', right, left)}: -(nth($measures, 2));
   }
 }
+

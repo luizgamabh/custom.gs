@@ -1,5 +1,5 @@
 ![Custom Grid System](https://raw.github.com/luizgamabh/custom.gs/master/assets/img/logo.png)
-#[http://custom.gs](http://custom.gs)
+# [http://custom.gs](http://custom.gs)
 
 Custom Grid System is a new Sass (and Less ASAP) based grid system that combines best practices of:
 
@@ -12,87 +12,139 @@ Custom.gs works with columns rather than percentages, anyway you can set-up many
 
 ## How it works?
 
-### UNSEMANTIC MODE
+> **There are two types of people:** Those that use semantic grid and those that do not.
 
-Let's look at `custom.sass` file:
+### Unsemantic way (for wimps)
+
+Let's look at `custom.sass` example:
 ```sass
 $semantic: false
+$number-of-columns: 10
 ```
 
+So, our `page.html` can be:
 ```html
-<div id="main" class="container_52">
-    <section class="grid_32">
-        First column
+<main class="main" class="container_10">
+    <section class="grid_6">
+        Bolinha
     </section>
-    <aside class="grid_20">
+    <aside class="grid_4">
         Second Column
     </aside>
-</div>
+</main>
 ```
 
-### SEMANTIC MODE (same result without many classes messing your code)
+### Semantic way (for fuckers)
 
-`custom.sass`
+Same result without many classes messing your code. This is our `custom.sass`:
 ```sass
 $semantic: true
+$number-of-columns: 10
 ```
 
-`my_website.sass`:
+`your_nice_component.sass`:
 ```sass
 @import "custom"
 
-div#main
-  +container(52)
+.main
+  +container(10)
 
 section
-  +grid(32)
+  +grid(6)
 
 aside
-  +grid(20)
+  +grid(4)
 ```
 
 ```html
-<div id="main">
+<main class="main">
     <section>
         First column
     </section>
     <aside>
         Second column
     </aside>
-</div>
+</main>
 ```
 
 ### NESTED GRIDS
 
+`Unsemantic`:
 ```html
-<div id="nested" class="grid_parent">
-    ...nested grids
+<div class="grid_10 grid_parent">
+    <div class="grid_5"></div>
+    <div class="grid_5"></div>
 </div>
 ```
 
-or
-
+`Semantic`:
 ```sass
-div#nested
+.parent
+  +grid(5)
   +grid_parent
+  .nested
+    +grid(5)
 ```
 
 ## Information
 
 ### Option variables:
 
-* `$semantic`: boolean, default: true. Description: Generates (if false) or not (if true, semantic mode) css classes.
-* `$container-max-width`: measure in px. Description: Max width of container
-* `$base-resolution`: measure in px. Description: Container max width will get 100% from this resolution
-* `$number-of-columns`: integer. Description: Grid columns amount
-* `$gutter`: measure in px. Description: Space between columns
-* `$fixed-gutter`: boolean, default: true Description: Gutter will not resize within fluid columns
-* `$fluid`: boolean, default: true. Description: Works (if true) or not (if false) with relative measures.
+* `$base-resolution`: measure in px (>= $container-max-width). **Container width will get a percent from this resolution**
+* `$container-max-width`: measure in px. **Container max width**
+* `$min-resolution`: measure in px or ++false++. **Defines (or not) a minimum container width**
+* `$number-of-columns`: integer. **Grid columns amount**
+* `$fluid`: boolean. **Fluid columns? If true grid will be responsive, else not!**
+* `$gutter`: measure in px. **Space between columns**
+* `$fixed-gutter`: boolean. **If true, gutter width will not squeeze when using fluid columns**
+* `$semantic`: boolean. **It true do not generate many classes. Please say true :D**
+
+### Mixins:
+
+#### +container( [ $clear: false ] )
+Defines your container
+
+###### Optional params
+`$clear`: Default: **false** | Clear the container (can be used to disable the container in some breakpoint).
+
+Example:
+```sass
+.main
+  +container
+@media only screen and (max-width: 768px)
+  .main
+    +container(true)
+```
+
+#### +grid( $columns, [ $context: $number-of-columns, $options ] )
+Defines your grid column
+
+###### Mandatory params
+`$columns`: number of columns (integer)
+
+###### Optional params
+`$context`: Default: **$number-of-columns** | Defines a new reference overwriting the $number-of-columns just for this specific element.
+
+###### Helper options
+`$direction`: 'ltr'
+`$gutter`: $gutter
+`$clear`: false
+`$release-others`: false
+
+Examples:
+```sass
+.main
+  +container
+@media only screen and (max-width: 768px)
+  .main
+    +container(true)
+```
+
 
 
 ## Recomendations
 
-### Increase the accuracy of the relative measures
+### Increase the accuracy of relative measures
 
 It is highly recommended that you work with precision when dealing with measures. At your `compass.rb` or `config.rb` file, add the following line:
 
