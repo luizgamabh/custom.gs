@@ -86,9 +86,9 @@ aside
     +grid(5)
 ```
 
-## Information
+## Documentation
 
-### Option variables:
+### General grid options:
 
 * `$base-resolution`: measure in px (>= $container-max-width). **Container width will get a percent from this resolution**
 * `$container-max-width`: measure in px. **Container max width**
