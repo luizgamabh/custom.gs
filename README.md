@@ -126,25 +126,119 @@ Defines your grid column
 `$context`: Default: **$number-of-columns** | Defines a new reference overwriting the $number-of-columns just for this specific element.
 
 ###### Helper options
-`$direction`: 'ltr'
-`$gutter`: $gutter
-`$clear`: false
-`$release-others`: false
+`'direction'`: 'ltr'
+`'gutter'`: measure in px. Change the default gutter size.
+`'clear'`: boolean. If true add a `clear: left` for nth-child(xn+1) columns of your grid preventing shoddy breaks.
+`'release'`: false. Release the `clear: left` for nth-child(xn+1)
 
 Examples:
 ```sass
 .main
   +container
-@media only screen and (max-width: 768px)
-  .main
-    +container(true)
+  .contents
+    +grid(6)
+    +grid_parent
+    .gallery__list-item
+      +grid(1, 4, ('clear': true))
+  .side
+    +grid(4)
 ```
 
+#### +prefix( $left, [ $context: $number-of-columns ] )
+Insert empty space before a grid unit.
 
+###### Mandatory params
+`$left`: integer | Add x columns (just blank space) on left of your element.
+
+###### Optional params
+`$context`: integer | Defines a new reference overwriting the $number-of-columns just for this specific element.
+
+Example:
+```sass
+.my_indented_element
+  +left(1)
+  +grid(9)
+```
+
+#### +suffix( $right, [ $context: $number-of-columns ] )
+Insert empty space before a grid unit.
+
+###### Mandatory params
+`$right`: integer | Add x columns (just blank space) on right of your element.
+
+###### Optional params
+`$context`: integer | Defines a new reference overwriting the $number-of-columns just for this specific element.
+
+Example:
+```sass
+.my_indented_element
+  +right(1)
+  +grid(9)
+```
+
+#### +push( $left )
+Rearrange element position.
+
+###### Mandatory params
+`$left`: integer | Repositions the element x grid columns right.
+
+Example:
+```sass
+.send_me_to_right
+  +grid(5)
+  +push(5)
+```
+
+#### +pull( $right )
+Rearrange element position.
+
+###### Mandatory params
+`$left`: integer | Repositions the element x grid columns left.
+
+Example:
+```sass
+.send_me_to_left
+  +grid(5)
+  +pull(5)
+```
+
+#### +gutter( $gutter )
+Insert just the defined grid gutter on any element.
+
+###### Optional params
+`$gutter`: measure in px | Changes the predefined gutter.
+
+Example:
+```sass
+.omg_i_must_have_the_same_grid_gutter
+  +gutter
+```
+
+#### +clear()
+Clear floated elements
+
+Example:
+```sass
+.i_am_a_motherfucker_element_and_i_will_break_this_grid
+  +clear
+```
+
+#### +clearfix()
+Inserts a clearfix. **Everybody knows what is that!**
+
+Example:
+```sass
+.please_i_wanna_see_my_size
+  +clearfix
+```
+
+#### ~~+grid_sidebar($size, $position: 'left', $class-view: 'view', $class-sidebar: 'sidebar', $grid_parent: true)~~
+Creates a column of your grid with fixed width. Don't want to resize your sidebar?
+Ps.: New mixing. Please do not use before I document it. **Pass here tomorrow. :p**
 
 ## Recomendations
 
-### Increase the accuracy of relative measures
+### Increase the accuracy of relative measures, or an evil goat will eat your socks!
 
 It is highly recommended that you work with precision when dealing with measures. At your `compass.rb` or `config.rb` file, add the following line:
 
