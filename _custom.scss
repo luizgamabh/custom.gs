@@ -2,26 +2,26 @@
 @import "compass";
 
 /*!
-    Custom Grid System 2.2.0 - http://custom.gs/
+    Custom Grid System 2.3.0 - http://custom.gs/
 
-    Custom Grid System is a new Sass based grid system that combines best practices of:
+    Custom Grid System is a new **fully customizable** Sass based grid system that combines best practices of:
      * 960 Grid System - http://960.gs/
      * Unsemantic - http://unsemantic.com/
      * Twitter Bootstrap - http://getbootstrap.com/
      * Semantic - http://semantic.gs/
-    Licensed under GPL and MIT.
+    Licensed under GPL v3.
 */
 
 /* CustomGS Setup Variables */
 
-$base-resolution: 1250px;
-$container-max-width: 1200px;
-$min-resolution: false;
-$number-of-columns: 10;
-$fluid: true;
-$gutter: 16px;
-$fixed-gutter: true;
-$semantic: true;
+$base-resolution: 1250px; // Container max-width will get 100% from this resolution
+$container-max-width: 1200px; // Container max width
+$min-resolution: false; // false or px value
+$number-of-columns: 10; // Grid columns amount
+$fluid: true; // Fluid columns?
+$gutter: 16px; // Gutter (space between columns)
+$fixed-gutter: true; // Gutter will not change within fluid columns
+$semantic: true; // Do not generate classes
 
 /* Helper Variables - Do not touch this! */
 
@@ -34,7 +34,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
 @function responsive($target, $context, $measure: "%") {
   @if $fluid {
     $measure: if($measure=="%",100%,1em);
-    @return ($target / $context) * 100%;
+    @return ($target / $context) * $measure;
   } @else {
     @return $target;
   }
@@ -54,8 +54,8 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
     padding-left: $_gutter / 2;
     padding-right: $_gutter / 2;
   } @else {
-    margin-left: responsive($_gutter / 2, $container-max-width); /* #{unresponsive($gutter / 2, $container-max-width)} */
-    margin-right: responsive($_gutter / 2, $container-max-width); /* #{unresponsive($gutter / 2, $container-max-width)} */
+    margin-left: responsive($_gutter / 2, $container-max-width, '%', true); /* #{unresponsive($gutter / 2, $container-max-width)} */
+    margin-right: responsive($_gutter / 2, $container-max-width, '%', true); /* #{unresponsive($gutter / 2, $container-max-width)} */
   }
 }
 
@@ -100,7 +100,9 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
     float: right;
   }
   position: relative;
-  @include gutter($gutter);
+  @if $gutter {
+    @include gutter($gutter);
+  }
 }
 
 @if $semantic == false {
@@ -152,12 +154,14 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
     padding-left: 0 !important;
     padding-right: 0 !important;
   } @else {
-    >:first-child {
-      @extend %alpha;
-    }
-    >:last-child {
-      @extend %omega;
-    }
+    @extend %alpha;
+    @extend %omega;
+    //>:first-child {
+    //  @extend %alpha;
+    //}
+    //>:last-child {
+    //  @extend %omega;
+    //}
   }
 }
 
@@ -183,16 +187,17 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
 }
 
 @mixin grid($columns, $context: $number-of-columns, $options: ()) {
-  //$direction: 'ltr', $gutter: $gutter, $clear: false, $release-others: false
+  //'direction': 'ltr', 'gutter': 'gutter', 'break': false, 'unbreak': false, 'debug': false
 
   // Default values:
   $direction: if(map-has-key($options, "direction"), map-get($options, "direction"), 'ltr');
-  $gutter: if(map-has-key($options, "gutter"), map-get($options, "gutter"), $gutter);
-  $clear: if(map-has-key($options, "clear"), map-get($options, "clear"), false);
-  $release-others: if(map-has-key($options, "release"), map-get($options, "release"), false);
+  $break: if(map-has-key($options, "break"), map-get($options, "break"), false);
+  $unbreak: if(map-has-key($options, "unbreak"), map-get($options, "unbreak"), false);
   $debug: if(map-has-key($options, "debug"), map-get($options, "debug"), false);
+  $grid_parent: if(map-has-key($options, "parent"), map-get($options, "parent"), false);
+  $gutter: if($grid_parent, 0, if(map-has-key($options, "gutter"), map-get($options, "gutter"), $gutter));
   @if ($debug) {
-    @debug "Direction: #{$direction} / Gutter: #{$gutter} / Clear: #{$clear} / Release: #{$release-others}";
+    @debug "Direction: #{$direction} / Gutter: #{$gutter} / Clear: #{$break} / Release: #{$unbreak}";
   }
   // End
 
@@ -213,8 +218,8 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
       margin-right: responsive($gutter / 2, $total-column-width * $context - $gutter); /* #{unresponsive($gutter / 2, $total-column-width * $context - $gutter)} */
     }
   }
-  @if ($clear) {
-    @include grid_clear($context, $direction, $release-others);
+  @if ($break) {
+    @include grid_clear($context, $direction, $unbreak);
   }
 }
 
@@ -334,13 +339,13 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
   }
 }
 
-@mixin grid_clear($columns, $direction, $release-others: false) {
-  @if $release-others {
-    &:nth-child(n) {
+@mixin grid_clear($columns, $direction, $unbreak: false) {
+  @if $unbreak {
+    &:nth-of-type(n) {
       clear: none;
     }
   }
-  &:nth-child(#{$columns}n+1) {
+  &:nth-of-type(#{$columns}n+1) {
     @if ($direction == 'ltr') {
       clear: left;
     } @else {
