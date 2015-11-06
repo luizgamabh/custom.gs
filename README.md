@@ -128,8 +128,8 @@ Defines your grid column
 ###### Helper options
 `'direction'`: 'ltr'
 `'gutter'`: measure in px. Change the default gutter size.
-`'clear'`: boolean. If true add a `clear: left` for nth-child(xn+1) columns of your grid preventing shoddy breaks.
-`'release'`: false. Release the `clear: left` for nth-child(xn+1)
+`'break'`: boolean. If true add a `clear: left` for nth-child(xn+1) where x is the number of columns of your grid preventing shoddy breaks.
+`'unbreak'`: false. Removes `clear: left` property for nth-child(n). It's recommended to use in company of `'break': true` on media queries preventing inheritance from bigger resolution.
 
 Examples:
 ```sass
