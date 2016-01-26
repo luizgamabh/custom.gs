@@ -14,10 +14,10 @@
 
 /* CustomGS Setup Variables */
 
-$base-resolution: 1250px; // Container max-width will get 100% from this resolution
-$container-max-width: 1200px; // Container max width
+$base-resolution: 1552px; // Container max-width will get 100% from this resolution
+$container-max-width: 1520px; // Container max width
 $min-resolution: false; // false or px value
-$number-of-columns: 10; // Grid columns amount
+$number-of-columns: 16; // Grid columns amount
 $fluid: true; // Fluid columns?
 $gutter: 16px; // Gutter (space between columns)
 $fixed-gutter: true; // Gutter will not change within fluid columns
@@ -227,6 +227,8 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
 ----------------------------------------------------------------------------------------------------*/
 
 @mixin prefix($left, $context: $number-of-columns) {
+  $column-width: ($container-max-width / $context) - $gutter;
+  $total-column-width: $gutter + $column-width;
   @if $fixed-gutter {
     margin-left: responsive($column-width+($total-column-width*($left - 1))+$gutter, $container-max-width); /* #{unresponsive($column-width+($total-column-width*($left - 1))+$gutter, $container-max-width)} */
   } @else {
@@ -246,6 +248,8 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
 ----------------------------------------------------------------------------------------------------*/
 
 @mixin suffix($right, $context: $number-of-columns) {
+  $column-width: ($container-max-width / $context) - $gutter;
+  $total-column-width: $gutter + $column-width;
   @if $fixed-gutter {
     margin-right: responsive($column-width+($total-column-width*($right - 1))+$gutter, $container-max-width); /* #{unresponsive($column-width+($total-column-width*($right - 1))+$gutter, $container-max-width)} */
   } @else {
