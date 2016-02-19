@@ -2,7 +2,7 @@
 @import "compass";
 
 /*!
-    Custom Grid System 2.3.0 - http://custom.gs/
+    Custom Grid System 2.3.1 - http://custom.gs/
 
     Custom Grid System is a new **fully customizable** Sass based grid system that combines best practices of:
      * 960 Grid System - http://960.gs/
@@ -319,19 +319,12 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
   }
 }
 
-/* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
+/* http://cssmojo.com/latest_new_clearfix_so_far/ */
 
 @mixin clearfix {
-  &:before,
   &:after {
     content: '\0020';
-    display: block;
-    overflow: hidden;
-    visibility: hidden;
-    width: 0;
-    height: 0;
-  }
-  &:after {
+    display: table;
     clear: both;
   }
 }
