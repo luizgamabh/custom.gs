@@ -2,7 +2,7 @@
 @import "compass";
 
 /*!
-    Custom Grid System 2.3.3 - http://custom.gs/
+    Custom Grid System 2.4.0 - http://custom.gs/
 
     Custom Grid System is a new **fully customizable** Sass based grid system that combines best practices of:
      * 960 Grid System - http://960.gs/
@@ -14,11 +14,12 @@
 
 /* CustomGS Setup Variables */
 
-$base-resolution: 1552px; // Container max-width will get 100% from this resolution
-$container-max-width: 1520px; // Container max width
+$container-width: 96%; // false or value in px or percent
+$container-max-width: 1520px; // false or value in px or percent
 $min-resolution: false; // false or px value
 $number-of-columns: 16; // Grid columns amount
 $fluid: true; // Fluid columns?
+$ie8compatible: false; // Use margin + calc instead of box-sizing + padding
 $gutter: 16px; // Gutter (space between columns)
 $fixed-gutter: true; // Gutter will not change within fluid columns
 $semantic: true; // Do not generate classes
@@ -51,8 +52,13 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
 @mixin gutter($_gutter: $gutter) {
   @if $fixed-gutter {
     @include box-sizing(border-box);
-    padding-left: $_gutter / 2;
-    padding-right: $_gutter / 2;
+    @if $ie8compatible {
+      padding-left: $_gutter / 2;
+      padding-right: $_gutter / 2;
+    } @else {
+      margin-left: $_gutter / 2;
+      margin-right: $_gutter / 2;
+    }
   } @else {
     margin-left: responsive($_gutter / 2, $container-max-width, '%', true); /* #{unresponsive($gutter / 2, $container-max-width)} */
     margin-right: responsive($_gutter / 2, $container-max-width, '%', true); /* #{unresponsive($gutter / 2, $container-max-width)} */
@@ -70,8 +76,14 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
       width: 100%;
       max-width: inherit;
     } @else {
-      max-width: $container-max-width;
-      width: responsive($container-max-width, $base-resolution); /* #{unresponsive($container-max-width, $base-resolution)} */
+      @if $container-max-width {
+        max-width: $container-max-width;
+        @if $container-max-width {
+          width: $container-width;
+        }
+      } @else {
+        width: 100%;
+      }
     }
   } @else {
     @if $clear == 'clear' {
@@ -151,8 +163,13 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
 
 @mixin grid_parent {
   @if $fixed-gutter {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    @if $ie8compatible {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    } @else {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
   } @else {
     @extend %alpha;
     @extend %omega;
@@ -206,7 +223,11 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
   @include grids($direction, $gutter);
   $fluider: if($fluid, $number-of-columns / $context, 1);
   @if $fixed-gutter {
-    width: responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width); /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
+    @if $ie8compatible {
+      width: responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width); /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
+    } @else {
+      width: calc(responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width) - $gutter); /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
+    }
   } @else {
     @if $context == $number-of-columns {
       width: responsive($column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width);
@@ -289,7 +310,11 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
 @if $semantic == false {
   @for $i from 1 to $number-of-columns {
     .container_#{$number-of-columns} .pull_#{$i} {
-      padding-left: responsive(-($total-column-width*$i), $container-max-width); /* #{unresponsive(-($total-column-width*$i), $container-max-width)} */
+      @if $ie8compatible {
+        padding-left: responsive(-($total-column-width*$i), $container-max-width); /* #{unresponsive(-($total-column-width*$i), $container-max-width)} */
+      } @else {
+        margin-left: responsive(-($total-column-width*$i), $container-max-width); /* #{unresponsive(-($total-column-width*$i), $container-max-width)} */
+      }
     }
   }
 }
