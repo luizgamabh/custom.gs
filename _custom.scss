@@ -226,7 +226,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false);
     @if $ie8compatible {
       width: responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width); /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
     } @else {
-      width: calc(#{responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} - $gutter); /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
+      width: calc(#{responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} - #{$gutter}); /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
     }
   } @else {
     @if $context == $number-of-columns {
