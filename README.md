@@ -144,6 +144,18 @@ Examples:
     +grid(4)
 ```
 
+#### +expand()
+Forces a full window column inside container, extrapolating the container width.
+> Uses viewport units and does not work on IE8
+
+Examples:
+```sass
+.main
+  +container
+  .full-column
+    +expand
+```
+
 #### +prefix( $left, [ $context: $number-of-columns ] )
 Insert empty space before a grid unit.
 
