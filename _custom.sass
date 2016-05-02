@@ -15,9 +15,9 @@
 /* CustomGS Setup Variables */
 
 $container-width: 96% // false or value in px or percent
-$container-max-width: 1520px // false or value in px or percent
+$container-max-width: 1280px // false or value in px or percent
 $min-resolution: false // false or px value
-$number-of-columns: 16 // Grid columns amount
+$number-of-columns: 6 // Grid columns amount
 $fluid: true // Fluid columns?
 $ie8compatible: false // Use margin + calc instead of box-sizing + padding
 $gutter: 16px // Gutter (space between columns)
@@ -45,7 +45,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false)
   @else
     @return ""
 
-@mixin gutter($_gutter: $gutter)
+=gutter($_gutter: $gutter)
   @if $fixed-gutter
     +box-sizing(border-box)
     @if $ie8compatible
@@ -62,7 +62,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false)
    Containers
    ========================================================================== */
 
-@mixin container($clear: false)
+=container($clear: false)
   margin-left: auto
   margin-right: auto
   @if $fluid
@@ -90,7 +90,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false)
    Grids
    ========================================================================== */
 
-@mixin grids($direction: 'ltr', $gutter: $gutter)
+=grids($direction: 'ltr', $gutter: $gutter)
   display: inline
   @if $direction == 'ltr'
     float: left
@@ -147,7 +147,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false)
    Grid >> Nested
    ========================================================================== */
 
-@mixin grid_parent
+=grid_parent
   @if $fixed-gutter
     @if $ie8compatible
       padding-left: 0 !important
@@ -181,7 +181,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false)
       @else
         width: responsive($column-width+($total-column-width*($i - 1)), $container-max-width) /* #{unresponsive($column-width+($total-column-width*($i - 1)), $container-max-width)} */
 
-@mixin grid($columns, $context: $number-of-columns, $options: ())
+=grid($columns, $context: $number-of-columns, $options: ())
   //'direction': 'ltr', 'gutter': 'gutter', 'break': false, 'unbreak': false, 'debug': false
 
   // Default values:
@@ -219,7 +219,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false)
    Prefix Extra Space >> #{$number-of-columns} columns
    ========================================================================== */
 
-@mixin prefix($left, $context: $number-of-columns)
+=prefix($left, $context: $number-of-columns)
   $column-width: ($container-max-width / $context) - $gutter
   $total-column-width: $gutter + $column-width
   @if $fixed-gutter
@@ -236,7 +236,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false)
    Suffix Extra Space >> #{$number-of-columns} columns
    ========================================================================== */
 
-@mixin suffix($right, $context: $number-of-columns)
+=suffix($right, $context: $number-of-columns)
   $column-width: ($container-max-width / $context) - $gutter
   $total-column-width: $gutter + $column-width
   @if $fixed-gutter
@@ -258,7 +258,9 @@ $fixed-gutter: if($fluid, $fixed-gutter, false)
     .container_#{$number-of-columns} .push_#{$i}
       left: responsive($total-column-width*$i, $container-max-width) /* #{unresponsive($total-column-width*$i, $container-max-width)} */
 
-@mixin push($left)
+=push($left, $context: $number-of-columns)
+  $column-width: ($container-max-width / $context) - $gutter
+  $total-column-width: $gutter + $column-width
   @extend %pushes_pulls
   left: responsive($total-column-width*$left, $container-max-width) /* #{unresponsive($total-column-width*$left, $container-max-width)} */
 
@@ -276,7 +278,9 @@ $fixed-gutter: if($fluid, $fixed-gutter, false)
       @else
         margin-left: responsive(-($total-column-width*$i), $container-max-width) /* #{unresponsive(-($total-column-width*$i), $container-max-width)} */
 
-@mixin pull($right)
+=pull($right, $context: $number-of-columns)
+  $column-width: ($container-max-width / $context) - $gutter
+  $total-column-width: $gutter + $column-width
   @extend %pushes_pulls
   left: responsive(-($total-column-width*$right), $container-max-width) /* #{unresponsive(-($total-column-width*$right), $container-max-width)} */
 
@@ -286,7 +290,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false)
 
 /* http://sonspring.com/journal/clearing-floats */
 
-@mixin clear
+=clear
   clear: both
   display: block
   overflow: hidden
@@ -300,7 +304,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false)
 
 /* http://yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified/ */
 
-@mixin clearfix
+=clearfix
   &:before,
   &:after
     content: '\0020'
@@ -316,7 +320,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false)
   .clearfix
     +clearfix
 
-@mixin grid_clear($columns, $direction, $unbreak: false)
+=grid_clear($columns, $direction, $unbreak: false)
   @if $unbreak
     &:nth-of-type(n)
       clear: none
@@ -336,7 +340,7 @@ $fixed-gutter: if($fluid, $fixed-gutter, false)
   $width: $columns * $total-column-width
   @return $space, $width
 
-@mixin grid_sidebar($size, $position: 'left', $class-view: 'view', $class-sidebar: 'sidebar', $grid_parent: true)
+=grid_sidebar($size, $position: 'left', $class-view: 'view', $class-sidebar: 'sidebar', $grid_parent: true)
   $measures: absolute-column-space($size)
   +clearfix
   .#{$class-view}
