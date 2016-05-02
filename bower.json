@@ -5,7 +5,7 @@
     "Luiz Gustavo Freire Gama <luizgamabh@gmail.com>"
   ],
   "description": "Custom Grid System",
-  "main": "_custom.scss",
+  "main": "_custom.sass",
   "keywords": [
     "grid",
     "system",
@@ -18,7 +18,7 @@
   "license": "MIT",
   "ignore": [
     "**/*",
-    "!_custom.scss",
+    "!_custom.sass",
     "!README.md"
   ]
 }
