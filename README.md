@@ -188,11 +188,14 @@ Example:
   +grid(9)
 ```
 
-#### +push( $left )
+#### +push( $left, [ $context: $number-of-columns ] )
 Rearrange element position.
 
 ###### Mandatory params
 `$left`: integer | Repositions the element x grid columns right.
+
+###### Optional params
+`$context`: integer | Defines a new reference overwriting the $number-of-columns just for this specific element.
 
 Example:
 ```sass
@@ -201,11 +204,14 @@ Example:
   +push(5)
 ```
 
-#### +pull( $right )
+#### +pull( $right, [ $context: $number-of-columns ] )
 Rearrange element position.
 
 ###### Mandatory params
 `$left`: integer | Repositions the element x grid columns left.
+
+###### Optional params
+`$context`: integer | Defines a new reference overwriting the $number-of-columns just for this specific element.
 
 Example:
 ```sass
