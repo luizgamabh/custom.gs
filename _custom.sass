@@ -203,7 +203,10 @@ $fixed-gutter: if($fluid, $fixed-gutter, false)
     @if $ie8compatible
       width: responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width) /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
     @else
-      width: calc(#{responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} - #{$gutter}) /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
+      @if $gutter > 0
+        width: calc(#{responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} - #{$gutter}) /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
+      @else
+        width: responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width) /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
   @else
     @if $context == $number-of-columns
       width: responsive($column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)
