@@ -126,6 +126,7 @@ Defines your grid column
 `$context`: Default: **$number-of-columns** | Defines a new reference overwriting the $number-of-columns just for this specific element.
 
 ###### Helper options
+`'parent'`: boolean. If true removes gutter from element.
 `'direction'`: 'ltr'
 `'gutter'`: measure in px. Change the default gutter size.
 `'break'`: boolean. If true add a `clear: left` for nth-child(xn+1) where x is the number of columns of your grid preventing shoddy breaks.
@@ -139,7 +140,7 @@ Examples:
     +grid(6)
     +grid_parent
     .gallery__list-item
-      +grid(1, 4, ('clear': true))
+      +grid(1, 4, ('clear': true, 'parent': true))
   .side
     +grid(4)
 ```
