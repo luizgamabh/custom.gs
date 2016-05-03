@@ -2,6 +2,10 @@
 
 ## Version history
 
+### 4.0.8
+
+- Hotfix -> grid parent issue
+
 ### 4.0.7
 
 - Push and pull with context param
