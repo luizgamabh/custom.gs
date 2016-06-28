@@ -1,359 +1,71 @@
-@charset "UTF-8"
-@import "compass"
+// Custom Grid System
+// Author: Luiz Gustavo Freire Gama
 
-///*!
-    Custom Grid System 4.0.3 - http://custom.gs/
+// Variables
 
-    Custom Grid System is a new **fully customizable** Sass based grid system that combines best practices of:
-     * 960 Grid System - http://960.gs/
-     * Unsemantic - http://unsemantic.com/
-     * Twitter Bootstrap - http://getbootstrap.com/
-     * Semantic - http://semantic.gs/
-    Licensed under GPL v3.
-//*/
+$default-container-with: 100% !default
+$default-gutter: 24px !default
+$default-cols: 12 !default
+$default-direction: 'ltr'
+$default-edges: true !default
+$fixed-gutter: true !default
+//$fluid: true !default // not used for now
+//$semantic: true !default // not used for now
 
-/* CustomGS Setup Variables */
 
-$container-width: 96% // false or value in px or percent
-$container-max-width: 1280px // false or value in px or percent
-$min-resolution: false // false or px value
-$number-of-columns: 6 // Grid columns amount
-$fluid: true // Fluid columns?
-$ie8compatible: false // Use margin + calc instead of box-sizing + padding
-$gutter: 16px // Gutter (space between columns)
-$fixed-gutter: true // Gutter will not change within fluid columns
-$semantic: true // Do not generate classes
-
-/* Helper Variables - Do not touch this! */
-
-$column-width: ($container-max-width / $number-of-columns) - $gutter
-$total-column-width: $gutter + $column-width
-$fixed-gutter: if($fluid, $fixed-gutter, false)
-
-/* Functions - Do not touch this! */
-
-@function responsive($target, $context, $measure: "%")
-  @if $fluid
-    $measure: if($measure=="%",100%,1em)
-    @return ($target / $context) * $measure
+// +container
+=container($width: $default-container-with, $clear: false)
+  @if $clear
+    max-width: inherit
+    margin-left: inherit
+    margin-right: inherit
   @else
-    @return $target
+    max-width: $width
+    margin-left: auto
+    margin-right: auto
 
-@function unresponsive($target, $context)
-  @if $fluid
-    @return "#{$target}/#{$context}"
-  @else
-    @return ""
 
-=gutter($_gutter: $gutter)
-  @if $fixed-gutter
-    +box-sizing(border-box)
-    @if $ie8compatible
-      padding-left: $_gutter / 2
-      padding-right: $_gutter / 2
-    @else
-      margin-left: $_gutter / 2
-      margin-right: $_gutter / 2
-  @else
-    margin-left: responsive($_gutter / 2, $container-max-width, '%', true) /* #{unresponsive($gutter / 2, $container-max-width)} */
-    margin-right: responsive($_gutter / 2, $container-max-width, '%', true) /* #{unresponsive($gutter / 2, $container-max-width)} */
-
-/* ==========================================================================
-   Containers
-   ========================================================================== */
-
-=container($clear: false)
-  margin-left: auto
-  margin-right: auto
-  @if $fluid
-    @if $clear == 'clear'
-      width: 100%
-      max-width: inherit
-    @else
-      @if $container-max-width
-        max-width: $container-max-width
-        @if $container-max-width
-          width: $container-width
-      @else
-        width: 100%
-  @else
-    @if $clear == 'clear'
-      width: 100%
-    @else
-      width: $container-max-width
-
-@if $semantic == false
-  .container_#{$number-of-columns}
-    +container
-
-/* ==========================================================================
-   Grids
-   ========================================================================== */
-
-=grids($direction: 'ltr', $gutter: $gutter)
-  display: inline
+// +grid
+=grid($cols, $total, $gutter: $default-gutter, $edges: $default-edges, $cycle: 0, $uncycle: 0, $direction: $default-direction, $prefix: 0, $suffix: 0, $parent: false)
+  @warn $gutter
   @if $direction == 'ltr'
     float: left
-  @else if $direction == 'rtl'
+  @else
     float: right
-  position: relative
-  @if $gutter
-    +gutter($gutter)
-
-@if $semantic == false
-  @for $i from 1 through $number-of-columns
-    .grid_#{$i}
-      +grids
-
-%pushes_pulls
-  position: relative
-
-@if $semantic == false
-  @for $i from 1 through $number-of-columns
-    .push_#{$i}, .pull_#{$i}
-      @extend %pushes_pulls
-
-/* ==========================================================================
-   Grid >> Expandable
-   ========================================================================== */
-
-=expand
-  width: 100vw
-  position: relative
-  margin-left: -50vw
-  left: 50%
-  text-align: center
-
-/* ==========================================================================
-   Grid >> Children (Alpha ~ First, Omega ~ Last)
-   ========================================================================== */
-
-%alpha
-  margin-left: 0
-
-%omega
-  margin-right: 0
-
-/*@if $semantic == false
-  .alpha
-    @extend %alpha
-  }
-
-  .omega
-    @extend %omega
-  }*/
-
-/* ==========================================================================
-   Grid >> Nested
-   ========================================================================== */
-
-=grid_parent
-  @if $fixed-gutter
-    @if $ie8compatible
-      padding-left: 0 !important
-      padding-right: 0 !important
-    @else
-      margin-left: 0 !important
-      margin-right: 0 !important
-  @else
-    @extend %alpha
-    @extend %omega
-    //>:first-child
-    //  @extend %alpha
-    //}
-    //>:last-child
-    //  @extend %omega
-    //}
-
-@if $semantic == false
-  .grid_parent
-    +grid_parent
-
-/* ==========================================================================
-   Grid >> #{$number-of-columns} columns
-   ========================================================================== */
-
-@if $semantic == false
-  @for $i from 1 through $number-of-columns
-    .container_#{$number-of-columns} .grid_#{$i}
-      @if $fixed-gutter
-        width: responsive($column-width+$gutter+($total-column-width*($i - 1)), $container-max-width) /* #{unresponsive($column-width+$gutter+($total-column-width*($i - 1)), $container-max-width)} */
-      @else
-        width: responsive($column-width+($total-column-width*($i - 1)), $container-max-width) /* #{unresponsive($column-width+($total-column-width*($i - 1)), $container-max-width)} */
-
-=grid($columns, $context: $number-of-columns, $options: ())
-  //'direction': 'ltr', 'gutter': 'gutter', 'break': false, 'unbreak': false, 'debug': false
-
-  // Default values:
-  $direction: if(map-has-key($options, "direction"), map-get($options, "direction"), 'ltr')
-  $break: if(map-has-key($options, "break"), map-get($options, "break"), false)
-  $unbreak: if(map-has-key($options, "unbreak"), map-get($options, "unbreak"), false)
-  $debug: if(map-has-key($options, "debug"), map-get($options, "debug"), false)
-  $grid_parent: if(map-has-key($options, "parent"), map-get($options, "parent"), false)
-  $gutter: if($grid_parent, 0, if(map-has-key($options, "gutter"), map-get($options, "gutter"), $gutter))
-  @if ($debug)
-    @debug "Direction: #{$direction} / Gutter: #{$gutter} / Clear: #{$break} / Release: #{$unbreak}"
-  // End
-
-  $column-width: ($container-max-width / $number-of-columns) - $gutter
-  $total-column-width: $gutter + $column-width
-  +grids($direction, $gutter)
-  $fluider: if($fluid, $number-of-columns / $context, 1)
-  @if $fixed-gutter
-    @if $ie8compatible
-      width: responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width) /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
-    @else
-      @if $gutter > 0
-        width: calc(#{responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} - #{$gutter}) /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
-      @else
-        width: responsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width) /* #{unresponsive($total-column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)} */
-  @else
-    @if $context == $number-of-columns
-      width: responsive($column-width+($total-column-width*(($columns * $fluider) - 1)), $container-max-width)
-    @else
-      width: responsive($column-width * $columns + ($gutter * ($columns - 1)), $context * $total-column-width - $gutter)
-    @if $fluid and $context != $number-of-columns
-      margin-left: responsive($gutter / 2, $total-column-width * $context - $gutter) /* #{unresponsive($gutter / 2, $total-column-width * $context - $gutter)} */
-      margin-right: responsive($gutter / 2, $total-column-width * $context - $gutter) /* #{unresponsive($gutter / 2, $total-column-width * $context - $gutter)} */
-  @if ($break)
-    +grid_clear($context, $direction, $unbreak)
-
-/* ==========================================================================
-   Prefix Extra Space >> #{$number-of-columns} columns
-   ========================================================================== */
-
-=prefix($left, $context: $number-of-columns)
-  $column-width: ($container-max-width / $context) - $gutter
-  $total-column-width: $gutter + $column-width
-  @if $fixed-gutter
-    margin-left: responsive($column-width+($total-column-width*($left - 1))+$gutter, $container-max-width) /* #{unresponsive($column-width+($total-column-width*($left - 1))+$gutter, $container-max-width)} */
-  @else
-    padding-left: responsive($column-width+($total-column-width*($left - 1))+$gutter, $container-max-width) /* #{unresponsive($column-width+($total-column-width*($left - 1))+$gutter, $container-max-width)} */
-
-@if $semantic == false
-  @for $i from 1 through 24
-    .container_#{$number-of-columns} .prefix_#{$i}
-      +prefix($i)
-
-/* ==========================================================================
-   Suffix Extra Space >> #{$number-of-columns} columns
-   ========================================================================== */
-
-=suffix($right, $context: $number-of-columns)
-  $column-width: ($container-max-width / $context) - $gutter
-  $total-column-width: $gutter + $column-width
-  @if $fixed-gutter
-    margin-right: responsive($column-width+($total-column-width*($right - 1))+$gutter, $container-max-width) /* #{unresponsive($column-width+($total-column-width*($right - 1))+$gutter, $container-max-width)} */
-  @else
-    padding-right: responsive($column-width+($total-column-width*($right - 1))+$gutter, $container-max-width) /* #{unresponsive($column-width+($total-column-width*($right - 1))+$gutter, $container-max-width)} */
-
-@for $i from 1 through $number-of-columns
-  @if $semantic == false
-    .container_#{$number-of-columns} .suffix_#{$i}
-      +suffix($i)
-
-/* ==========================================================================
-   Push Space >> #{$number-of-columns} columns
-   ========================================================================== */
-
-@if $semantic == false
-  @for $i from 1 to $number-of-columns
-    .container_#{$number-of-columns} .push_#{$i}
-      left: responsive($total-column-width*$i, $container-max-width) /* #{unresponsive($total-column-width*$i, $container-max-width)} */
-
-=push($left, $context: $number-of-columns)
-  $column-width: ($container-max-width / $context) - $gutter
-  $total-column-width: $gutter + $column-width
-  @extend %pushes_pulls
-  left: responsive($total-column-width*$left, $container-max-width) /* #{unresponsive($total-column-width*$left, $container-max-width)} */
-
-
-
-/* ==========================================================================
-   Pull Space >> #{$number-of-columns} columns
-   ========================================================================== */
-
-@if $semantic == false
-  @for $i from 1 to $number-of-columns
-    .container_#{$number-of-columns} .pull_#{$i}
-      @if $ie8compatible
-        padding-left: responsive(-($total-column-width*$i), $container-max-width) /* #{unresponsive(-($total-column-width*$i), $container-max-width)} */
-      @else
-        margin-left: responsive(-($total-column-width*$i), $container-max-width) /* #{unresponsive(-($total-column-width*$i), $container-max-width)} */
-
-=pull($right, $context: $number-of-columns)
-  $column-width: ($container-max-width / $context) - $gutter
-  $total-column-width: $gutter + $column-width
-  @extend %pushes_pulls
-  left: responsive(-($total-column-width*$right), $container-max-width) /* #{unresponsive(-($total-column-width*$right), $container-max-width)} */
-
-/* ==========================================================================
-   `Clear Floated Elements
-   ========================================================================== */
-
-/* http://sonspring.com/journal/clearing-floats */
-
-=clear
-  clear: both
-  display: block
-  overflow: hidden
-  visibility: hidden
-  width: 0
-  height: 0
-
-@if $semantic == false
-  .clear
-    +clear
-
-/* http://yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified/ */
-
-=clearfix
-  &:before,
-  &:after
-    content: '\0020'
-    display: block
-    overflow: hidden
-    visibility: hidden
-    width: 0
-    height: 0
-  &:after
-    clear: both
-
-@if $semantic == false
-  .clearfix
-    +clearfix
-
-=grid_clear($columns, $direction, $unbreak: false)
-  @if $unbreak
-    &:nth-of-type(n)
+  $width: ($cols / $total) * 100%
+  @if $uncycle > 0
+    &:nth-of-type(#{$uncycle}n)
+      margin-right: inherit
+    &:nth-of-type(#{$uncycle}n+1)
       clear: none
-  
-  &:nth-of-type(#{$columns}n+1)
-    @if ($direction == 'ltr')
-      clear: left
+  @if $edges
+    @if $parent
+      width: $width
     @else
-      clear: right
+      width: calc(#{$width} - #{$gutter})
+      @if $prefix <= 0
+        margin-left: $gutter / 2
+      @else
+        margin-left: calc(#{$width * $suffix} + #{$gutter / 2})
+      @if $suffix <= 0
+        margin-right: $gutter / 2
+      @else
+        margin-right: calc(#{$width * $suffix} + #{$gutter / 2})
+  @else
+    $sum: ($cols / $total) * $gutter
+    width: calc(#{$width} + #{$sum} - #{$gutter})
+    @if $suffix == 0
+      margin-right: $gutter
+    @if $prefix > 0
+      margin-left: calc(#{$width * $prefix} + #{$sum * $prefix})
+    @if $suffix > 0
+      margin-right: calc(#{$width * $prefix} + #{$sum * $prefix + $gutter})
+    @if $cycle == 0
+      &:last-of-type
+        margin-right: 0
+    @else
+      &:nth-of-type(#{$cycle}n)
+        margin-right: 0
+      &:nth-of-type(#{$cycle}n+1)
+        clear: both
 
-/* ==========================================================================
-   Helpers
-   ========================================================================== */
-
-@function absolute-column-space($columns)
-  $space: $columns * $total-column-width + ($gutter / 2)
-  $width: $columns * $total-column-width
-  @return $space, $width
-
-=grid_sidebar($size, $position: 'left', $class-view: 'view', $class-sidebar: 'sidebar', $grid_parent: true)
-  $measures: absolute-column-space($size)
-  +clearfix
-  .#{$class-view}
-    +box-sizing(border-box)
-    float: if($position == 'left', right, left)
-    width: 100%
-    padding-#{if($position == 'left', left, right)}: if($grid_parent, nth($measures, 1), nth($measures, 1) + ($gutter / 2))
-    @if not $grid_parent
-      padding-#{if($position == 'left', right, left)}: $gutter / 2
-  .#{$class-sidebar}
-    float: if($position == 'left', left, right)
-    width: nth($measures, 2)
-    margin-#{if($position == 'left', right, left)}: -(nth($measures, 2))
