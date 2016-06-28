@@ -26,7 +26,7 @@ $fixed-gutter: true !default
 
 
 // +grid
-=grid($cols, $total, $gutter: $default-gutter, $edges: $default-edges, $cycle: 0, $uncycle: 0, $direction: $default-direction, $prefix: 0, $suffix: 0)
+=grid($cols, $total, $gutter: $default-gutter, $edges: $default-edges, $cycle: 0, $uncycle: 0, $direction: $default-direction, $prefix: 0, $suffix: 0, $parent: false)
   @warn $gutter
   @if $direction == 'ltr'
     float: left
@@ -39,15 +39,18 @@ $fixed-gutter: true !default
     &:nth-of-type(#{$uncycle}n+1)
       clear: none
   @if $edges
-    width: calc(#{$width} - #{$gutter})
-    @if $prefix <= 0
-      margin-left: $gutter / 2
+    @if $parent
+      width: $width
     @else
-      margin-left: calc(#{$width * $suffix} + #{$gutter / 2})
-    @if $suffix <= 0
-      margin-right: $gutter / 2
-    @else
-      margin-right: calc(#{$width * $suffix} + #{$gutter / 2})
+      width: calc(#{$width} - #{$gutter})
+      @if $prefix <= 0
+        margin-left: $gutter / 2
+      @else
+        margin-left: calc(#{$width * $suffix} + #{$gutter / 2})
+      @if $suffix <= 0
+        margin-right: $gutter / 2
+      @else
+        margin-right: calc(#{$width * $suffix} + #{$gutter / 2})
   @else
     $sum: ($cols / $total) * $gutter
     width: calc(#{$width} + #{$sum} - #{$gutter})
@@ -65,3 +68,4 @@ $fixed-gutter: true !default
         margin-right: 0
       &:nth-of-type(#{$cycle}n+1)
         clear: both
+
