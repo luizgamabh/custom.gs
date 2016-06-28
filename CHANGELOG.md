@@ -2,6 +2,10 @@
 
 ## Version history
 
+### 5.0.0
+
+- Refactored whole code
+
 ### 4.0.8
 
 - Hotfix -> grid parent issue
