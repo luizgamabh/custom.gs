@@ -2,6 +2,10 @@
 
 ## Version history
 
+### 5.0.1
+
+- Hotfixes + updated docs
+
 ### 5.0.0
 
 - Refactored whole code
