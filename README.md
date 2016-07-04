@@ -1,63 +1,27 @@
 ![Custom Grid System](https://raw.github.com/luizgamabh/custom.gs/master/assets/img/logo.png)
 # [http://custom.gs](http://custom.gs)
 
-Custom Grid System is a new Sass (and Less ASAP) based grid system that combines best practices of:
-
-* [Grid960](http://960.gs)
-* [Bootstrap](http://getbootstrap.com)
-* [Unsemantic](http://unsemantic.com)
-* [Semantic](http://semantic.gs)
-
-Custom.gs works with columns rather than percentages, anyway you can set-up many columns as you need.
+Custom Grid System is a new grid system completely customizable for any need.
 
 ## How it works?
-
-> **There are two types of people:** Those that use semantic grid and those that do not.
-
-### Unsemantic way (for wimps)
-
-Let's look at `custom.sass` example:
-```sass
-$semantic: false
-$number-of-columns: 10
-```
-
-So, our `page.html` can be:
-```html
-<main class="main" class="container_10">
-    <section class="grid_6">
-        Bolinha
-    </section>
-    <aside class="grid_4">
-        Second Column
-    </aside>
-</main>
-```
-
-### Semantic way (for fuckers)
-
-Same result without many classes messing your code. This is our `custom.sass`:
-```sass
-$semantic: true
-$number-of-columns: 10
-```
 
 `your_nice_component.sass`:
 ```sass
 @import "custom"
 
-.main
-  +container(10)
+main
+  +container(1024px)
 
 section
-  +grid(6)
+  +grid(6, 10)
 
 aside
-  +grid(4)
+  +grid(4, 10)
 ```
 
+`your_nice_component.html`:
 ```html
-<main class="main">
+<main>
     <section>
         First column
     </section>
@@ -69,40 +33,27 @@ aside
 
 ### NESTED GRIDS
 
-`Unsemantic`:
-```html
-<div class="grid_10 grid_parent">
-    <div class="grid_5"></div>
-    <div class="grid_5"></div>
-</div>
-```
-
-`Semantic`:
 ```sass
 .parent
-  +grid(5)
-  +grid_parent
-  .nested
-    +grid(5)
+  +grid(1, 2, $parent: true)
+  .child
+    +grid(1, 3)
 ```
 
 ## Documentation
 
 ### General grid options:
 
-* `$base-resolution`: measure in px (>= $container-max-width). **Container width will get a percent from this resolution**
-* `$container-max-width`: measure in px. **Container max width**
-* `$min-resolution`: measure in px or ++false++. **Defines (or not) a minimum container width**
-* `$number-of-columns`: integer. **Grid columns amount**
-* `$fluid`: boolean. **Fluid columns? If true grid will be responsive, else not!**
-* `$gutter`: measure in px. **Space between columns**
-* `$fixed-gutter`: boolean. **If true, gutter width will not squeeze when using fluid columns**
-* `$semantic`: boolean. **It true do not generate many classes. Please say true :D**
+* `$default-container-with`: ==100% !default== `width measure with unit` - Website width limits
+* `$default-gutter`: ==24px !default== `width measure with unit` - Space between columns
+* `$default-cols`: ==12 !default== `integer` - Default amount of columns
+* `$default-direction`: =='ltr' !default== `string` - **ltr**: Left-to-right or **rtl**: Right-to-left
+* `$default-edges`: ==true !default== `boolean` - Enable gutter on edges (extremities)?
 
 ### Mixins:
 
-#### +container( [ $clear: false ] )
-Defines your container
+#### +container( [ $width, $clear: false ] )
+Defines your container with desired width, if ommited uses `$default-container-width` general variable.
 
 ###### Optional params
 `$clear`: Default: **false** | Clear the container (can be used to disable the container in some breakpoint).
@@ -111,38 +62,66 @@ Example:
 ```sass
 .main
   +container
+.footer
+  +container(1024px)
 @media only screen and (max-width: 768px)
   .main
-    +container(true)
+    +container($clear: true)
 ```
 
-#### +grid( $columns, [ $context: $number-of-columns, $options ] )
+#### +grid($cols, [ $total, $helpers] )
 Defines your grid column
 
 ###### Mandatory params
-`$columns`: number of columns (integer)
+`$cols`: number of columns (integer)
 
 ###### Optional params
-`$context`: Default: **$number-of-columns** | Defines a new reference overwriting the $number-of-columns just for this specific element.
+`$total`: Default: **$default-cols** | Defines a new reference overwriting the $default-cols just for this specific element.
 
 ###### Helper options
-`'parent'`: boolean. If true removes gutter from element.
-`'direction'`: 'ltr'
-`'gutter'`: measure in px. Change the default gutter size.
-`'break'`: boolean. If true add a `clear: left` for nth-child(xn+1) where x is the number of columns of your grid preventing shoddy breaks.
-`'unbreak'`: false. Removes `clear: left` property for nth-child(n). It's recommended to use in company of `'break': true` on media queries preventing inheritance from bigger resolution.
+`$gutter`: width measure with unit. Overrides $default-gutter variable.
+`$edges`: boolean. Overrides $default-edges variable.
+`$cycle`: integer. Forces a breakpoint after `x` elements.
+`$uncycle`: integer. Removes cycle breakpoints.
+`$direction`: string (ltr or rtl). Overrides $default-direction variable.
+`$prefix`: integer. Prefix with an empty space of `x` columns.
+`$suffix`: integer. Suffix with an empty space of `x` columns.
+`$push`: integer. Pushes the column `x` times.
+`$pull`: integer. Pulls the column `x` times.
+`$parent`: boolean. Remove margins when $edges are enabled.
 
 Examples:
 ```sass
+$default-edges: true
+$default-cols: 10
+
+.header
+  +container
+
+  .header__title
+    +grid(1, 2, $push: 1)
+
+  .header__menu
+    +grid(1, 2, $pull: 1)
+
 .main
   +container
-  .contents
-    +grid(6)
-    +grid_parent
+
+  .gallery__list
+    +grid(10, 16, $parent: true)
+
     .gallery__list-item
-      +grid(1, 4, ('clear': true, 'parent': true))
+      +grid(1, 4, $cycle: 4)
+
   .side
-    +grid(4)
+    +grid(6, 16)
+
+.footer
+  +container
+
+  .footer__left,
+  .footer__right
+    +grid(5)
 ```
 
 #### +expand()
@@ -157,79 +136,116 @@ Examples:
     +expand
 ```
 
-#### +prefix( $left, [ $context: $number-of-columns ] )
-Insert empty space before a grid unit.
+#### +prefix( $cols, [ $total: $number-of-columns ] )
+Insert empty space before a grid column.
 
 ###### Mandatory params
-`$left`: integer | Add x columns (just blank space) on left of your element.
+`$cols`: integer | Prefixes the current column with blank space equivalent to x columns.
 
 ###### Optional params
-`$context`: integer | Defines a new reference overwriting the $number-of-columns just for this specific element.
+`$total`: integer | Defines a new reference overwriting the $number-of-columns just for this specific element.
+
+###### Helper params
+`$gutter`: integer | Defines a new reference overwriting the $number-of-columns just for this specific element.
+`$edges`: integer | Defines a new reference overwriting the $number-of-columns just for this specific element.
 
 Example:
 ```sass
+$default-cols: 10
+
 .my_indented_element
-  +left(1)
-  +grid(9)
+  +grid(9, $prefix: 1)
+
+.alone_and_depressive_element
+  +grid(1, 5, $prefix: 4)
+
+.another_alone_element
+  +grid(1, 5)
+  +prefix(4, 5)
 ```
 
-#### +suffix( $right, [ $context: $number-of-columns ] )
-Insert empty space before a grid unit.
+#### +suffix( $cols, [ $total: $number-of-columns ] )
+Insert empty space after a grid column.
 
 ###### Mandatory params
-`$right`: integer | Add x columns (just blank space) on right of your element.
+`$cols`: integer | Suffixes the current column with blank space equivalent to x columns.
 
 ###### Optional params
-`$context`: integer | Defines a new reference overwriting the $number-of-columns just for this specific element.
+`$total`: integer | Defines a new reference overwriting the $number-of-columns just for this specific element.
+
+###### Helper params
+`$gutter`: integer | Defines a new reference overwriting the $number-of-columns just for this specific element.
+`$edges`: integer | Defines a new reference overwriting the $number-of-columns just for this specific element.
 
 Example:
 ```sass
-.my_indented_element
-  +right(1)
-  +grid(9)
+$default-cols: 10
+
+.my_outdented_element
+  +grid(9, $suffix: 1)
+
+.centralized_alone_and_depressive_element
+  +grid(1, 5, $prefix: 2, $suffix: 2)
+
+.another_alone_element
+  +grid(1, 5)
+  +prefix(2, 5)
+  +suffix(2, 5)
 ```
 
-#### +push( $left, [ $context: $number-of-columns ] )
+#### +push( $cols, [ $total, $relative ] )
 Rearrange element position.
 
 ###### Mandatory params
-`$left`: integer | Repositions the element x grid columns right.
+`$cols`: integer | Repositions the element x `$cols` after.
 
 ###### Optional params
-`$context`: integer | Defines a new reference overwriting the $number-of-columns just for this specific element.
+`$total`: integer | Defines a new reference overwriting the $default-cols just for this specific element.
+`$relative`: boolean | Adds `position: relative;` property to element, default ==true==.
 
 Example:
 ```sass
+$default-cols: 10
+
 .send_me_to_right
   +grid(5)
   +push(5)
-```
 
-#### +pull( $right, [ $context: $number-of-columns ] )
+#### +pull( $cols, [ $total, $relative ] )
 Rearrange element position.
 
 ###### Mandatory params
-`$left`: integer | Repositions the element x grid columns left.
+`$cols`: integer | Repositions the element x `$cols` before.
 
 ###### Optional params
-`$context`: integer | Defines a new reference overwriting the $number-of-columns just for this specific element.
+`$total`: integer | Defines a new reference overwriting the $default-cols just for this specific element.
+`$relative`: boolean | Adds `position: relative;` property to element, default ==true==.
 
 Example:
 ```sass
+$default-cols: 10
+
+.send_me_to_right
+  +grid(5)
+  +push(5)
+
 .send_me_to_left
   +grid(5)
   +pull(5)
+
+.send_me_to_left_encapsulated_way_same_result
+  +grid(5, $pull: 5)
 ```
 
-#### +gutter( $gutter )
-Insert just the defined grid gutter on any element.
+#### +gutter([ $edges ])
+Insert default gutter on any element.
 
 ###### Optional params
-`$gutter`: measure in px | Changes the predefined gutter.
+`$edges`: boolean | Enable or disable edges overriding $default-edges
 
 Example:
 ```sass
-.omg_i_must_have_the_same_grid_gutter
+.omg_i_must_have_the_global_grid_gutter
   +gutter
 ```
 
@@ -250,10 +266,6 @@ Example:
 .please_i_wanna_see_my_size
   +clearfix
 ```
-
-#### ~~+grid_sidebar($size, $position: 'left', $class-view: 'view', $class-sidebar: 'sidebar', $grid_parent: true)~~
-Creates a column of your grid with fixed width. Don't want to resize your sidebar?
-Ps.: New mixing. Please do not use before I document it. **Pass here tomorrow. :p**
 
 ## Recomendations
 
