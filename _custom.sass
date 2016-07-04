@@ -33,6 +33,7 @@ $default-edges: true !default
   @else
     float: right
   $width: ($cols / $total) * 100%
+  $column_size: (1 / $total) * 100%
   @if $uncycle > 0
     &:nth-of-type(#{$uncycle}n)
       margin-right: inherit
@@ -43,10 +44,10 @@ $default-edges: true !default
       width: $width
     @else
       width: calc(#{$width} - #{$gutter})
-      @if $prefix <= 0
+      @if $prefix == 0
         margin-left: $gutter / 2
       @else
-        margin-left: calc(#{$width * $prefix} + #{$gutter / 2})
+        margin-left: calc(#{$column_size * $prefix} + #{$gutter / 2})
       @if $suffix <= 0
         margin-right: $gutter / 2
       @else
@@ -64,9 +65,9 @@ $default-edges: true !default
     @if $suffix == 0
       margin-right: $gutter
     @if $prefix > 0
-      margin-left: calc(#{$width * $prefix} + #{$sum * $prefix})
+      margin-left: calc(#{$column_size * $prefix} + #{$sum * $prefix})
     @if $suffix > 0
-      margin-right: calc(#{$width * $prefix} + #{$sum * $prefix + $gutter})
+      margin-right: calc(#{$column_size * $suffix} + #{$sum * $suffix + $gutter})
     @if $push > 0
       position: relative
       left: calc(#{$width * $push} + #{$sum * $push})
@@ -83,20 +84,22 @@ $default-edges: true !default
         clear: both
 
 =prefix($cols, $total: $default-cols, $gutter: $default-gutter, $edges: $default-edges)
+  $column_size: (1 / $total) * 100%
   $width: ($cols / $total) * 100%
   @if $edges
-    margin-left: calc(#{$width * $cols} + #{$gutter / 2})
+    margin-left: calc(#{$column_size * $cols} + #{$gutter / 2})
   @else
     $sum: ($cols / $total) * $gutter
-    margin-left: calc(#{$width * $cols} + #{$sum * $cols})
+    margin-left: calc(#{$column_size * $cols} + #{$sum * $cols})
 
 =suffix($cols, $total: $default-cols, $gutter: $default-gutter, $edges: $default-edges)
+  $column_size: (1 / $total) * 100%
   $width: ($cols / $total) * 100%
   @if $edges
-    margin-right: calc(#{$width * $cols} + #{$gutter / 2})
+    margin-right: calc(#{$column_size * $cols} + #{$gutter / 2})
   @else
     $sum: ($cols / $total) * $gutter
-    margin-right: calc(#{$width * $cols} + #{$sum * $cols + $gutter})
+    margin-right: calc(#{$column_size * $cols} + #{$sum * $cols + $gutter})
 
 =push($cols, $total: $default-cols, $relative: true, $gutter: $default-gutter, $edges: $default-edges)
   $width: ($cols / $total) * 100%
