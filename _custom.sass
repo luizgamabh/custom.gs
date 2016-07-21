@@ -14,11 +14,14 @@ $default-edges: true !default
 
 
 // +container
-=container($width: $default-container-with, $clear: false)
+=container($width: $default-container-with, $clear: false, $margin: false)
   @if $clear
     max-width: inherit
     margin-left: inherit
     margin-right: inherit
+  @else if $margin
+    margin-left: $margin
+    margin-right: $margin
   @else
     max-width: $width
     margin-left: auto
@@ -43,15 +46,15 @@ $default-edges: true !default
     @if $parent
       width: $width
     @else
-      width: calc(#{$width} - #{$gutter})
+      width: if(strip-units($gutter) > 0, unquote("calc(#{$width} - #{$gutter})"), $width)
       @if $prefix == 0
         margin-left: $gutter / 2
       @else
-        margin-left: calc(#{$column_size * $prefix} + #{$gutter / 2})
+        margin-left: if(strip-units($gutter) > 0, unquote("calc(#{$column_size * $prefix} + #{$gutter / 2})"), $column_size * $prefix)
       @if $suffix <= 0
         margin-right: $gutter / 2
       @else
-        margin-right: calc(#{$width * $suffix} + #{$gutter / 2})
+        margin-right: if(strip-units($gutter) > 0, unquote("calc(#{$width * $suffix} + #{$gutter / 2})"), $width * $suffix)
     @if $push > 0
       position: relative
       left: $width * $push
@@ -61,19 +64,19 @@ $default-edges: true !default
 
   @else
     $sum: ($cols / $total) * $gutter
-    width: calc(#{$width} + #{$sum} - #{$gutter})
+    width: if(strip-units($gutter) > 0, unquote("calc(#{$width} + #{$sum} - #{$gutter})"), $width)
     @if $suffix == 0
       margin-right: $gutter
     @if $prefix > 0
-      margin-left: calc(#{$column_size * $prefix} + #{$sum * $prefix})
+      margin-left: if(strip-units($gutter) > 0, unquote("calc(#{$column_size * $prefix} + #{$sum * $prefix})"), $column_size * $prefix)
     @if $suffix > 0
-      margin-right: calc(#{$column_size * $suffix} + #{$sum * $suffix + $gutter})
+      margin-right: if(strip-units($gutter) > 0, unquote("calc(#{$column_size * $suffix} + #{$sum * $suffix + $gutter})"), $column_size * $suffix)
     @if $push > 0
       position: relative
-      left: calc(#{$width * $push} + #{$sum * $push})
+      left: if(strip-units($gutter) > 0, unquote("calc(#{$width * $push} + #{$sum * $push})"), $width * $push)
     @if $pull > 0
       position: relative
-      left: calc(#{-$width * $pull} - #{$sum * $pull})
+      left: if(strip-units($gutter) > 0, unquote("calc(#{-$width * $pull} - #{$sum * $pull})"), -$width * $pull)
     @if $cycle == 0
       &:last-of-type
         margin-right: 0
@@ -87,19 +90,19 @@ $default-edges: true !default
   $column_size: (1 / $total) * 100%
   $width: ($cols / $total) * 100%
   @if $edges
-    margin-left: calc(#{$column_size * $cols} + #{$gutter / 2})
+    margin-left: if(strip-units($gutter) > 0, unquote("calc(#{$column_size * $cols} + #{$gutter / 2})"), $column_size * $cols)
   @else
     $sum: ($cols / $total) * $gutter
-    margin-left: calc(#{$column_size * $cols} + #{$sum * $cols})
+    margin-left: if(strip-units($gutter) > 0, unquote("calc(#{$column_size * $cols} + #{$sum * $cols})"), $column_size * $cols)
 
 =suffix($cols, $total: $default-cols, $gutter: $default-gutter, $edges: $default-edges)
   $column_size: (1 / $total) * 100%
   $width: ($cols / $total) * 100%
   @if $edges
-    margin-right: calc(#{$column_size * $cols} + #{$gutter / 2})
+    margin-right: if(strip-units($gutter) > 0, unquote("calc(#{$column_size * $cols} + #{$gutter / 2})"), $column_size * $cols)
   @else
     $sum: ($cols / $total) * $gutter
-    margin-right: calc(#{$column_size * $cols} + #{$sum * $cols + $gutter})
+    margin-right: if(strip-units($gutter) > 0, unquote("calc(#{$column_size * $cols} + #{$sum * $cols + $gutter})"), $column_size * $cols)
 
 =push($cols, $total: $default-cols, $relative: true, $gutter: $default-gutter, $edges: $default-edges)
   $width: ($cols / $total) * 100%
@@ -109,7 +112,7 @@ $default-edges: true !default
     left: $width * $cols
   @else
     $sum: ($cols / $total) * $gutter
-    left: calc(#{$width * $cols} + #{$sum * $cols})
+    left: if(strip-units($gutter) > 0, unquote("calc(#{$width * $cols} + #{$sum * $cols})"), $width * $cols)
 
 =pull($cols, $total: $default-cols, $relative: true, $gutter: $default-gutter, $edges: $default-edges)
   $width: ($cols / $total) * 100%
@@ -119,7 +122,7 @@ $default-edges: true !default
     left: -$width * $cols
   @else
     $sum: ($cols / $total) * $gutter
-    left: calc(#{-$width * $cols} - #{$sum * $cols})
+    left: if(strip-units($gutter) > 0, unquote("calc(#{-$width * $cols} - #{$sum * $cols})"), -$width * $cols)
 
 =gutter($edges: $default-edges)
   @if $edges
@@ -158,3 +161,6 @@ $default-edges: true !default
     height: 0
   &:after
     clear: both
+
+@function strip-units($number)
+  @return $number / ($number * 0 + 1)
