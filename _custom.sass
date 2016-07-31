@@ -37,6 +37,9 @@ $default-edges: true !default
     float: right
   $width: ($cols / $total) * 100%
   $column_size: (1 / $total) * 100%
+  @if $cycle > 0
+    &:nth-of-type(#{$cycle}n+1)
+      clear: if($direction=='ltr', left, right)
   @if $uncycle > 0
     &:nth-of-type(#{$uncycle}n)
       margin-right: inherit
@@ -83,8 +86,6 @@ $default-edges: true !default
     @else
       &:nth-of-type(#{$cycle}n)
         margin-right: 0
-      &:nth-of-type(#{$cycle}n+1)
-        clear: both
 
 =prefix($cols, $total: $default-cols, $gutter: $default-gutter, $edges: $default-edges)
   $column_size: (1 / $total) * 100%
