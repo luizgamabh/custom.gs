@@ -14,8 +14,12 @@ $default-edges: true !default
 
 
 // +container
-=container($width: $default-container-with, $clear: false, $margin: false)
-  @if $clear
+=container($width: $default-container-with, $clear: false, $margin: false, $full-padding: false)
+  @if $full-padding
+    width: 100%
+    padding-left: $full-padding
+    padding-right: $full-padding
+  @else if $clear
     max-width: inherit
     margin-left: inherit
     margin-right: inherit
