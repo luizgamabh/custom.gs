@@ -14,8 +14,9 @@ $default-edges: true !default
 
 
 // +container
-=container($width: $default-container-with, $clear: false, $margin: false, $full-padding: false)
-  @if $full-padding
+=container($width: $default-container-with, $clear: false, $margin: false, padding: false)
+  @if padding
+    box-sizing: border-box
     width: 100%
     padding-left: $full-padding
     padding-right: $full-padding
