@@ -52,11 +52,14 @@ aside
 
 ### Mixins:
 
-#### +container( [ $width, $clear: false ] )
+#### +container( [ $optional_params ] )
 Defines your container with desired width, if ommited uses `$default-container-width` general variable.
 
 ###### Optional params
 `$clear`: Default: **false** | Clear the container (can be used to disable the container in some breakpoint).
+`$width`: Container width
+`$margin`: Container margin
+`$padding`: Container padding
 
 Example:
 ```sass
