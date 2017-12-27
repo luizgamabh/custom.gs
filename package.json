@@ -1,6 +1,6 @@
 {
   "name": "custom.gs",
-  "version": "5.1.3",
+  "version": "5.1.4",
   "description": "![Custom Grid System](https://raw.github.com/luizgamabh/custom.gs/master/assets/img/logo.png)\r # [http://custom.gs](http://custom.gs)",
   "main": "_custom.sass",
   "scripts": {
