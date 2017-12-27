@@ -1,0 +1,20 @@
+{
+  "name": "custom.gs",
+  "version": "5.1.3",
+  "description": "![Custom Grid System](https://raw.github.com/luizgamabh/custom.gs/master/assets/img/logo.png)\r # [http://custom.gs](http://custom.gs)",
+  "main": "_custom.sass",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luizgamabh/custom.gs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/luizgamabh/custom.gs/issues"
+  },
+  "homepage": "http://custom.gs"
+}
